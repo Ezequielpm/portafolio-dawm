@@ -21,14 +21,15 @@ const ACTIVIDADES = [
     },
     {
         numero: 2,
-        titulo: "Cursos con precios multimoneda",
-        resumen: "Catálogo demostrativo de cursos en línea. Los precios se guardan " +
-                 "en dólares y se convierten a pesos mexicanos, euros y yenes " +
-                 "consultando una API gratuita de tipo de cambio.",
+        titulo: "Oferta académica con precios multimoneda",
+        resumen: "SPA responsiva con la oferta académica de una institución. " +
+                 "Seis tarjetas en un grid que se reacomoda solo; el precio en " +
+                 "pesos es fijo y los de dólar y yen se recalculan contra una " +
+                 "API REST de tipo de cambio.",
         ruta: "actividades/02-cursos-monedas/index.html",
         fecha: "Septiembre 2026",
         estado: "Entregada",
         icono: "💱",
-        temas: ["API REST", "Frankfurter", "Intl.NumberFormat", "CSS Grid", "jQuery"]
+        temas: ["SPA", "CSS Grid responsivo", "API REST", "Hover CSS", "Intl.NumberFormat"]
     }
 ];

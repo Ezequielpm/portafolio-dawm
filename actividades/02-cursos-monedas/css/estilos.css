@@ -4,6 +4,7 @@
     --azul-oscuro: #0d2b46;
     --azul-claro: #1e5c92;
     --dorado: #c9a227;
+    --dorado-oscuro: #a8871d;
     --fondo: #eef1f5;
     --tarjeta: #ffffff;
     --texto: #2b3440;
@@ -99,58 +100,46 @@ body {
     color: var(--texto-suave);
 }
 
-/* ===== Selector de moneda ===== */
-.selector-moneda {
+/* ===== Botón Actualizar precios (RF3) ===== */
+#btn-actualizar {
     display: flex;
     align-items: center;
-    gap: 12px;
-}
-
-.selector-etiqueta {
-    font-size: 11.5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--texto-suave);
-}
-
-.chips {
-    display: flex;
-    gap: 6px;
-    background-color: #f2f5f8;
-    border: 1px solid var(--borde);
-    border-radius: 8px;
-    padding: 4px;
-}
-
-.chip {
-    padding: 7px 13px;
-    font-size: 13px;
+    gap: 9px;
+    padding: 12px 22px;
+    font-size: 14px;
     font-weight: 600;
     font-family: inherit;
-    color: var(--texto-suave);
-    background-color: transparent;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.15s, color 0.15s;
-}
-
-.chip:hover {
-    color: var(--azul-unach);
-    background-color: #e6ebf1;
-}
-
-.chip.activa {
-    background-color: var(--azul-unach);
     color: #fff;
+    background-color: var(--dorado);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
     box-shadow: var(--sombra);
+    transition: background-color 0.15s, transform 0.05s;
+}
+
+#btn-actualizar:hover:enabled {
+    background-color: var(--dorado-oscuro);
+}
+
+#btn-actualizar:active:enabled {
+    transform: translateY(1px);
+}
+
+#btn-actualizar:disabled {
+    opacity: 0.6;
+    cursor: progress;
+}
+
+.btn-icono {
+    font-size: 17px;
+    line-height: 1;
 }
 
 /* ===== Hero ===== */
 .hero {
     margin-top: 16px;
-    padding: 40px 36px;
+    padding: 36px;
     border-radius: 10px;
     color: #fff;
     background: linear-gradient(135deg, var(--azul-unach) 0%, var(--azul-claro) 100%);
@@ -161,8 +150,6 @@ body {
     font-family: Georgia, "Times New Roman", serif;
     font-size: 32px;
     line-height: 1.25;
-    margin-bottom: 12px;
-    max-width: 22ch;
 }
 
 .hero h1::after {
@@ -178,8 +165,12 @@ body {
 .hero p {
     margin-top: 14px;
     font-size: 15px;
-    max-width: 62ch;
+    max-width: 66ch;
     color: rgba(255, 255, 255, 0.86);
+}
+
+.hero strong {
+    color: #fff;
 }
 
 /* ===== Panel de tipo de cambio ===== */
@@ -202,17 +193,10 @@ body {
 }
 
 .tasas-encabezado h2,
-.catalogo-encabezado h2,
-.carrito h2 {
+.catalogo-titulo {
     font-family: Georgia, "Times New Roman", serif;
     font-size: 19px;
     color: var(--azul-unach);
-}
-
-.tasas-acciones {
-    display: flex;
-    align-items: center;
-    gap: 12px;
 }
 
 .estado {
@@ -220,37 +204,19 @@ body {
     color: var(--texto-suave);
 }
 
+.estado-listo {
+    color: var(--exito);
+    font-weight: 600;
+}
+
 .estado-error {
     color: var(--error);
     font-weight: 600;
 }
 
-#btn-actualizar {
-    padding: 7px 15px;
-    font-size: 12.5px;
-    font-weight: 600;
-    font-family: inherit;
-    color: var(--azul-unach);
-    background-color: #f2f5f8;
-    border: 1px solid var(--borde);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.15s, color 0.15s;
-}
-
-#btn-actualizar:hover:enabled {
-    background-color: var(--azul-unach);
-    color: #fff;
-}
-
-#btn-actualizar:disabled {
-    opacity: 0.5;
-    cursor: progress;
-}
-
 .tasas-lista {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     gap: 12px;
 }
 
@@ -264,7 +230,7 @@ body {
     border-radius: 8px;
 }
 
-.tasa-activa {
+.tasa-base {
     border-color: var(--azul-unach);
     background-color: #fff;
     box-shadow: 0 0 0 3px rgba(18, 58, 94, 0.1);
@@ -297,58 +263,19 @@ body {
 
 /* ===== Catálogo ===== */
 .catalogo {
-    margin-top: 24px;
+    margin-top: 26px;
 }
 
-.catalogo-encabezado {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
+.catalogo-titulo {
     margin-bottom: 14px;
 }
 
-.filtro {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 11.5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--texto-suave);
-}
-
-.filtro select {
-    padding: 8px 12px;
-    font-size: 13px;
-    font-family: inherit;
-    font-weight: 500;
-    text-transform: none;
-    letter-spacing: 0;
-    color: var(--texto);
-    background-color: var(--tarjeta);
-    border: 1px solid var(--borde);
-    border-radius: 6px;
-    cursor: pointer;
-    outline: none;
-}
-
-.filtro select:focus {
-    border-color: var(--azul-unach);
-    box-shadow: 0 0 0 3px rgba(18, 58, 94, 0.12);
-}
-
+/* RF1: rejilla responsiva. Las columnas se acomodan solas segun el
+   ancho disponible; cada tarjeta nunca baja de 280px. */
 .rejilla {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
-}
-
-.sin-resultados {
-    color: var(--texto-suave);
-    font-size: 14px;
+    gap: 18px;
 }
 
 /* ===== Tarjeta de curso ===== */
@@ -360,58 +287,72 @@ body {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: var(--sombra);
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition: box-shadow 0.15s;
 }
 
 .tarjeta:hover {
-    transform: translateY(-3px);
     box-shadow: var(--sombra-alta);
 }
 
+/* --- Portada: logo + imagen del curso --- */
 .tarjeta-portada {
+    height: 140px;
+    overflow: hidden;          /* recorta la imagen cuando se agranda */
+}
+
+/* RF2: al pasar el cursor por encima, la imagen crece 10% */
+.portada-imagen {
     position: relative;
-    height: 110px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, #1b4b76 0%, #2a719f 100%);
+    transition: transform 0.35s ease;
 }
 
-.tarjeta-icono {
-    font-size: 42px;
+.tarjeta-portada:hover .portada-imagen {
+    transform: scale(1.1);
+}
+
+.portada-logo {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 5px 11px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--azul-oscuro);
+    background-color: var(--dorado);
+    border-radius: 6px;
+}
+
+.portada-icono {
+    font-size: 46px;
     line-height: 1;
 }
 
-.tarjeta-categoria {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    padding: 4px 10px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: var(--azul-oscuro);
-    background-color: var(--dorado);
-    border-radius: 20px;
-}
-
+/* --- Cuerpo --- */
 .tarjeta-cuerpo {
     flex: 1;
     padding: 16px 18px;
 }
 
-.tarjeta-cuerpo h3 {
-    font-size: 15.5px;
-    line-height: 1.35;
-    color: var(--azul-unach);
-    margin-bottom: 4px;
+.tarjeta-institucion {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+    margin-bottom: 6px;
 }
 
-.tarjeta-instructor {
-    font-size: 12.5px;
-    color: var(--texto-suave);
-    margin-bottom: 12px;
+.tarjeta-cuerpo h3 {
+    font-size: 16.5px;
+    line-height: 1.32;
+    color: var(--azul-unach);
+    margin-bottom: 10px;
 }
 
 .tarjeta-datos {
@@ -419,6 +360,7 @@ body {
     flex-wrap: wrap;
     gap: 6px;
     list-style: none;
+    margin-bottom: 12px;
 }
 
 .tarjeta-datos li {
@@ -430,118 +372,67 @@ body {
     padding: 3px 9px;
 }
 
-.tarjeta-pie {
+.tarjeta-descripcion {
+    font-size: 13.5px;
+    color: var(--texto-suave);
+}
+
+/* --- Fila de precios: MXN fijo, USD y JPY calculados --- */
+.tarjeta-precios {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 18px;
     border-top: 1px solid var(--borde);
     background-color: #fbfcfd;
 }
 
+.precio {
+    flex: 1;
+    padding: 12px 6px;
+    text-align: center;
+    border-left: 1px solid var(--borde);
+}
+
+.precio:first-child {
+    border-left: none;
+}
+
+.precio-bandera {
+    display: block;
+    font-size: 17px;
+    line-height: 1.2;
+}
+
+.precio-etiqueta {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--texto-suave);
+    margin-bottom: 2px;
+}
+
 .precio-monto {
     display: block;
-    font-size: 19px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--azul-unach);
     font-variant-numeric: tabular-nums;
 }
 
-.precio-base {
-    display: block;
-    font-size: 11.5px;
-    color: var(--texto-suave);
-}
-
-.btn-agregar {
-    flex-shrink: 0;
-    padding: 9px 16px;
-    font-size: 12.5px;
+/* --- Botón de inscripción (solo visual, sin acción) --- */
+.btn-inscripcion {
+    padding: 13px;
+    font-size: 13.5px;
     font-weight: 600;
     font-family: inherit;
     color: #fff;
     background-color: var(--azul-unach);
     border: none;
-    border-radius: 6px;
+    border-top: 1px solid var(--borde);
     cursor: pointer;
-    transition: background-color 0.15s, transform 0.05s;
+    transition: background-color 0.15s;
 }
 
-.btn-agregar:hover {
+.btn-inscripcion:hover {
     background-color: var(--azul-oscuro);
-}
-
-.btn-agregar:active {
-    transform: translateY(1px);
-}
-
-.btn-agregar.agregado {
-    background-color: var(--exito);
-}
-
-/* ===== Resumen de compra ===== */
-.carrito {
-    margin-top: 24px;
-    padding: 20px 24px;
-    background-color: var(--tarjeta);
-    border: 1px solid var(--borde);
-    border-radius: 10px;
-    box-shadow: var(--sombra);
-}
-
-.carrito-lista {
-    list-style: none;
-    margin: 14px 0;
-}
-
-.carrito-lista li {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 16px;
-    padding: 9px 0;
-    border-bottom: 1px dashed var(--borde);
-    font-size: 14px;
-}
-
-.carrito-precio {
-    font-weight: 700;
-    color: var(--azul-unach);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-}
-
-.carrito-vacio {
-    color: var(--texto-suave);
-    font-style: italic;
-    border-bottom: none !important;
-}
-
-.carrito-total {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding-top: 12px;
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--texto-suave);
-}
-
-.carrito-total strong {
-    font-size: 24px;
-    letter-spacing: normal;
-    color: var(--azul-unach);
-    font-variant-numeric: tabular-nums;
-}
-
-.carrito-nota {
-    margin-top: 8px;
-    font-size: 12px;
-    color: var(--texto-suave);
-    font-style: italic;
 }
 
 /* ===== Pie ===== */
@@ -559,27 +450,42 @@ body {
     font-weight: 600;
 }
 
-/* ===== Responsivo ===== */
+/* ===== Responsivo (RF1) ===== */
+@media (max-width: 1024px) {
+    .rejilla {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+}
+
 @media (max-width: 860px) {
     .envoltorio {
         padding: 14px;
     }
 
-    .cabecera,
-    .selector-moneda {
+    .cabecera {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
     }
 
-    .chips {
-        flex-wrap: wrap;
+    #btn-actualizar {
+        justify-content: center;
     }
 
     .hero {
-        padding: 28px 22px;
+        padding: 26px 22px;
     }
 
     .hero h1 {
         font-size: 25px;
+    }
+}
+
+@media (max-width: 520px) {
+    .rejilla {
+        grid-template-columns: 1fr;
+    }
+
+    .precio-monto {
+        font-size: 13px;
     }
 }

@@ -35,21 +35,34 @@ portafolio-dawm/
 Página institucional de la UNACH. Calculadora con eventos de jQuery y
 consulta de un usuario por `id` a `jsonplaceholder.typicode.com` con `$.get()`.
 
-### 02 — Cursos con precios multimoneda
-Catálogo demo de cursos en línea. Cada curso guarda su precio **en dólares**
-y la interfaz lo convierte a **MXN, EUR y JPY** con las tasas que devuelve una
-API gratuita, sin llave de acceso:
+### 02 — Oferta académica con precios multimoneda
+SPA (una sola página) con diseño responsivo, inspirada en el catálogo de
+SaberesMX. Cumple los tres requerimientos de la práctica:
+
+**RF1 — Grid responsivo con 6 tarjetas.** `.rejilla` usa
+`grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))`, así que las
+columnas se reacomodan solas al cambiar la resolución (4 → 3 → 2 → 1).
+Cada ficha lleva logo, título, descripción y botón de inscripción; el botón
+es únicamente visual, no tiene ninguna acción programada.
+
+**RF2 — Efecto al pasar el cursor.** `.tarjeta-portada:hover .portada-imagen`
+aplica `transform: scale(1.1)`, es decir 10% más grande. El contenedor tiene
+`overflow: hidden` para que la imagen se recorte al crecer.
+
+**RF3 — Actualizar precios contra una API REST.** El precio en pesos
+mexicanos es **fijo** (`precioMXN` en `js/cursos.js`). Al pulsar el botón
+*Actualizar precios* se consulta el tipo de cambio y se recalculan
+únicamente dólar y yen:
 
 | | API | Endpoint |
 |---|---|---|
-| Principal | Frankfurter (Banco Central Europeo) | `https://api.frankfurter.dev/v1/latest?base=USD&symbols=MXN,EUR,JPY` |
-| Respaldo | ExchangeRate-API (endpoint abierto) | `https://open.er-api.com/v6/latest/USD` |
+| Principal | Frankfurter (Banco Central Europeo) | `https://api.frankfurter.dev/v1/latest?base=MXN&symbols=USD,JPY` |
+| Respaldo | ExchangeRate-API (endpoint abierto) | `https://open.er-api.com/v6/latest/MXN` |
 
-Si ninguna responde se usan tasas fijas de referencia (`TASAS_RESPALDO` en
-`js/app.js`) y la interfaz avisa que no hubo conexión.
-
-El formato de cada moneda lo resuelve `Intl.NumberFormat`, así que el yen se
-muestra sin decimales y cada moneda usa su separador correcto.
+Ninguna de las dos necesita llave de acceso. Si las dos fallan, la página
+conserva las tasas de referencia (`TASAS_RESPALDO`) y avisa en rojo que no
+hubo conexión. El formato de cada moneda lo resuelve `Intl.NumberFormat`,
+por eso el yen se muestra sin decimales.
 
 ## Agregar una actividad nueva
 
