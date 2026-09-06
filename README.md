@@ -1,20 +1,30 @@
-# Portafolio de Actividades — Desarrollo de Aplicaciones Web y Móviles
+# Portafolio de Actividades
 
-Universidad Autónoma de Chiapas · Ezequiel Peña · Agosto–Diciembre 2026
+**Desarrollo de Aplicaciones Web y Móviles**
+Ezequiel Peña Mazariegos · Matrícula 100017097 · 7.º semestre, grupo A
+Escuela de Tecnologías Digitales Aplicadas, Campus IV — UNACH
+Agosto–diciembre de 2026
 
-Sitio estático que reúne las actividades de la materia. La portada
+Repositorio donde voy reuniendo las prácticas de la materia. La portada
 (`index.html`) lista cada actividad y enlaza a su carpeta.
 
-## Estructura
+Sitio publicado: https://ezequielpm.github.io/portafolio-dawm/
+
+## Organización
+
+Cada práctica vive en su propia carpeta dentro de `actividades/`, con su
+HTML, su CSS y su JavaScript. Lo que se repite entre prácticas —el logo de
+la universidad, las fotos, los estilos de la portada— está en `assets/`,
+para no duplicar archivos.
 
 ```
 portafolio-dawm/
-├── index.html                     ← portada del portafolio
-├── assets/                        ← recursos compartidos
+├── index.html
+├── assets/
 │   ├── css/portafolio.css
-│   ├── js/actividades.js          ← lista de actividades (se edita aquí)
-│   ├── js/portafolio.js           ← genera las tarjetas de la portada
-│   └── img/                       ← logo-unach.png, escuela.jpg, edificio.jpg
+│   ├── js/actividades.js
+│   ├── js/portafolio.js
+│   └── img/
 ├── actividades/
 │   ├── 01-calculadora-unach/
 │   │   ├── index.html
@@ -23,69 +33,84 @@ portafolio-dawm/
 │   └── 02-cursos-monedas/
 │       ├── index.html
 │       ├── css/estilos.css
-│       ├── js/cursos.js           ← catálogo de cursos (datos)
-│       └── js/app.js              ← conversión de monedas e interfaz
-├── _respaldos/                    ← versiones viejas, se puede borrar
+│       ├── js/cursos.js
+│       └── js/app.js
+├── reporte/
 └── README.md
 ```
 
-## Actividades
+La portada no tiene las tarjetas escritas a mano: las arma
+`assets/js/portafolio.js` recorriendo el arreglo de `assets/js/actividades.js`.
+Así, al terminar una práctica nueva basta con agregar sus datos a ese arreglo
+en lugar de editar el HTML.
 
-### 01 — Calculadora y consulta de API
-Página institucional de la UNACH. Calculadora con eventos de jQuery y
-consulta de un usuario por `id` a `jsonplaceholder.typicode.com` con `$.get()`.
+## Práctica 01 — Calculadora y consulta de API
 
-### 02 — Oferta académica con precios multimoneda
-SPA (una sola página) con diseño responsivo, inspirada en el catálogo de
-SaberesMX. Cumple los tres requerimientos de la práctica:
+Página con la identidad de la UNACH. Contiene dos ejercicios: una calculadora
+que resuelve las cuatro operaciones capturando eventos con jQuery, y una
+consulta que trae un usuario por su `id` desde `jsonplaceholder.typicode.com`
+con `$.get()` y muestra su nombre y correo.
 
-**RF1 — Grid responsivo con 6 tarjetas.** `.rejilla` usa
-`grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))`, así que las
-columnas se reacomodan solas al cambiar la resolución (4 → 3 → 2 → 1).
-Cada ficha lleva logo, título, descripción y botón de inscripción; el botón
-es únicamente visual, no tiene ninguna acción programada.
+## Práctica 02 — Oferta académica con precios multimoneda
 
-**RF2 — Efecto al pasar el cursor.** `.tarjeta-portada:hover .portada-imagen`
-aplica `transform: scale(1.1)`, es decir 10% más grande. El contenedor tiene
-`overflow: hidden` para que la imagen se recorte al crecer.
+SPA responsiva con el catálogo de cursos de una institución, tomando como
+referencia visual la plataforma SaberesMX.
 
-**RF3 — Actualizar precios contra una API REST.** El precio en pesos
-mexicanos es **fijo** (`precioMXN` en `js/cursos.js`). Al pulsar el botón
-*Actualizar precios* se consulta el tipo de cambio y se recalculan
-únicamente dólar y yen:
+**Rejilla responsiva.** Las seis tarjetas se acomodan con CSS Grid:
 
-| | API | Endpoint |
+```css
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+```
+
+`auto-fill` calcula cuántas columnas caben en el ancho disponible y `minmax()`
+impide que una tarjeta se angoste más de 280 px. La rejilla pasa sola de
+cuatro columnas a tres, dos y una, sin declarar la cantidad de columnas para
+cada resolución. Las media queries de 1024, 860 y 520 px solo ajustan
+márgenes y tipografía.
+
+**Ampliación de la imagen.** Al pasar el cursor sobre la portada del curso,
+esta crece 10 %:
+
+```css
+.tarjeta-portada { overflow: hidden; }
+.tarjeta-portada:hover .portada-imagen { transform: scale(1.1); }
+```
+
+El `overflow: hidden` es lo que hace que la imagen se recorte al crecer en
+lugar de empujar el resto de la tarjeta.
+
+**Precios en tres monedas.** El precio en pesos es fijo y vive en
+`precioMXN`, dentro de `js/cursos.js`. El botón *Actualizar precios* consulta
+el tipo de cambio y recalcula únicamente dólar y yen:
+
+| | Servicio | Petición |
 |---|---|---|
-| Principal | Frankfurter (Banco Central Europeo) | `https://api.frankfurter.dev/v1/latest?base=MXN&symbols=USD,JPY` |
-| Respaldo | ExchangeRate-API (endpoint abierto) | `https://open.er-api.com/v6/latest/MXN` |
+| Principal | Frankfurter (Banco Central Europeo) | `api.frankfurter.dev/v1/latest?base=MXN&symbols=USD,JPY` |
+| Respaldo | ExchangeRate-API | `open.er-api.com/v6/latest/MXN` |
 
-Ninguna de las dos necesita llave de acceso. Si las dos fallan, la página
-conserva las tasas de referencia (`TASAS_RESPALDO`) y avisa en rojo que no
-hubo conexión. El formato de cada moneda lo resuelve `Intl.NumberFormat`,
-por eso el yen se muestra sin decimales.
+Ninguno de los dos pide llave de acceso. Si el principal falla se intenta el
+de respaldo, y si tampoco responde se conservan las tasas de referencia de
+`TASAS_RESPALDO` y la página avisa que no hubo conexión, para que el precio
+mostrado nunca aparezca como si viniera del servicio.
 
-## Agregar una actividad nueva
+El símbolo, el separador de miles y los decimales de cada moneda los resuelve
+`Intl.NumberFormat`; por eso el yen se muestra sin decimales sin tener que
+programarlo aparte.
 
-1. Crea la carpeta `actividades/03-nombre-de-la-actividad/` con su
-   `index.html`, `css/` y `js/`.
-2. Agrega en el `index.html` de la actividad el enlace de regreso:
-   `<a class="volver" href="../../index.html">← Volver al portafolio</a>`
-3. Copia un objeto de `assets/js/actividades.js` y ajusta sus datos.
-   La portada se regenera sola.
+El reporte de esta práctica está en `reporte/`, junto con el HTML que lo
+genera.
 
-Las imágenes compartidas se referencian desde una actividad con
-`../../assets/img/archivo.jpg`.
-
-## Ver en local
+## Ejecución local
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Luego abre <http://localhost:8000>.
+Y abrir <http://localhost:8000>. Hace falta un servidor porque las peticiones
+a la API no funcionan bien abriendo el archivo directamente con `file://`.
 
-## Publicar
+## Publicación
 
-Todas las rutas son relativas, así que el sitio funciona en cualquier
-hosting estático subiendo la carpeta tal cual: GitHub Pages, Netlify,
-Vercel, Cloudflare Pages o un servidor con `public_html`.
+Todas las rutas son relativas, así que el sitio funciona subiendo la carpeta
+tal cual a cualquier hosting estático. Está publicado en GitHub Pages desde
+la rama `main`.
