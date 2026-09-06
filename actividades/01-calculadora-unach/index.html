@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 1 — Calculadora y consulta de API | UNACH</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+
+    <a class="volver" href="../../index.html">&larr; Volver al portafolio</a>
+
+    <header>
+        <div class="imagen-edificio">
+            <img src="../../assets/img/escuela.jpg" alt="Edificio de la Universidad Autónoma de Chiapas">
+        </div>
+
+        <div class="titulo-unach">
+            <h1>Universidad Autónoma de Chiapas</h1>
+            <p>"Por la conciencia de la necesidad de servir"</p>
+        </div>
+
+        <div class="logo-unach">
+            <img src="../../assets/img/logo-unach.png" alt="Logotipo UNACH">
+        </div>
+    </header>
+
+    <nav>
+        <span>Actividad 1 &middot; Eventos con jQuery y consumo de API</span>
+    </nav>
+
+    <div class="contenedor-principal">
+
+        <main>
+            <h2>Calculadora básica</h2>
+            <p>Ejercicio de captura de eventos con jQuery. Se leen dos valores del
+               formulario, se aplica la operación seleccionada y el resultado se
+               escribe de vuelta en el campo de solo lectura.</p>
+        </main>
+
+        <aside>
+            <form id="formulario-calculadora">
+                <div class="campo">
+                    <label for="num1">Num1:</label>
+                    <input type="text" id="num1" placeholder="Dato ent">
+                </div>
+
+                <div class="campo">
+                    <label for="num2">Num2:</label>
+                    <input type="text" id="num2" placeholder="Dato ent">
+                </div>
+
+                <div class="campo">
+                    <label for="operacion">Operacion</label>
+                    <select id="operacion">
+                        <option value="multiplicacion">multiplicacion</option>
+                        <option value="suma">suma</option>
+                        <option value="resta">resta</option>
+                        <option value="division">division</option>
+                    </select>
+                </div>
+
+                <button type="button" id="btn-ejecutar">Ejecutar</button>
+
+                <div class="campo">
+                    <label for="resultado">Resultado:</label>
+                    <input type="text" id="resultado" readonly>
+                </div>
+            </form>
+        </aside>
+
+    </div>
+
+    <div class="contenedor-principal">
+
+        <main>
+            <h2>Consulta a una API</h2>
+            <p>Se solicita un usuario por su <code>id</code> a la API pública
+               <code>jsonplaceholder.typicode.com</code> con <code>$.get()</code>
+               y se muestran su nombre y correo.</p>
+        </main>
+
+        <aside>
+            <form id="formulario-consulta">
+                <div class="campo">
+                    <label for="idpersona">Id:</label>
+                    <input type="text" id="idpersona" placeholder="Del 1 al 10">
+                </div>
+
+                <button type="button" id="btn-consultar">Consultar</button>
+
+                <div class="campo">
+                    <label for="nom">Nombre:</label>
+                    <input type="text" id="nom" readonly>
+                </div>
+
+                <div class="campo">
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" readonly>
+                </div>
+            </form>
+        </aside>
+
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

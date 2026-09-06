@@ -1,0 +1,5 @@
+# Archivos de sistema de macOS
+.DS_Store
+
+# Respaldos de versiones anteriores (no se publican)
+_respaldos/

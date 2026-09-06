@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 2 — Cursos con precios multimoneda | UNACH</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+
+    <div class="envoltorio">
+
+        <a class="volver" href="../../index.html">&larr; Volver al portafolio</a>
+
+        <header class="cabecera">
+            <div class="marca">
+                <img src="../../assets/img/logo-unach.png" alt="Logotipo UNACH">
+                <div>
+                    <span class="marca-nombre">Aula<strong>UNACH</strong></span>
+                    <span class="marca-lema">Plataforma demo de cursos en línea</span>
+                </div>
+            </div>
+
+            <div class="selector-moneda" id="selector-moneda">
+                <span class="selector-etiqueta">Ver precios en</span>
+                <div class="chips" role="group" aria-label="Seleccionar moneda">
+                    <button type="button" class="chip activa" data-moneda="USD">🇺🇸 USD</button>
+                    <button type="button" class="chip" data-moneda="MXN">🇲🇽 MXN</button>
+                    <button type="button" class="chip" data-moneda="EUR">🇪🇺 EUR</button>
+                    <button type="button" class="chip" data-moneda="JPY">🇯🇵 JPY</button>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero">
+            <h1>Aprende a construir para la web y el móvil</h1>
+            <p>Catálogo demostrativo de la materia <em>Desarrollo de Aplicaciones Web
+               y Móviles</em>. Los precios se guardan en dólares y se convierten en
+               tiempo real a pesos mexicanos, euros y yenes usando una API pública
+               de tipo de cambio.</p>
+        </section>
+
+        <section class="panel-tasas" id="panel-tasas">
+            <div class="tasas-encabezado">
+                <h2>Tipo de cambio</h2>
+                <div class="tasas-acciones">
+                    <span class="estado" id="estado-tasas">Consultando la API…</span>
+                    <button type="button" id="btn-actualizar" title="Volver a consultar la API">Actualizar</button>
+                </div>
+            </div>
+            <div class="tasas-lista" id="tasas-lista"></div>
+        </section>
+
+        <section class="catalogo">
+            <div class="catalogo-encabezado">
+                <h2>Cursos disponibles</h2>
+                <label class="filtro">
+                    Categoría
+                    <select id="filtro-categoria">
+                        <option value="todas">Todas</option>
+                    </select>
+                </label>
+            </div>
+            <div class="rejilla" id="rejilla-cursos"></div>
+        </section>
+
+        <section class="carrito" id="carrito">
+            <h2>Resumen de compra</h2>
+            <ul class="carrito-lista" id="carrito-lista">
+                <li class="carrito-vacio">Aún no has agregado cursos.</li>
+            </ul>
+            <div class="carrito-total">
+                <span>Total</span>
+                <strong id="carrito-total">—</strong>
+            </div>
+            <p class="carrito-nota">Sitio de demostración: no se procesa ningún pago real.</p>
+        </section>
+
+        <footer class="pie">
+            <p><strong>Universidad Autónoma de Chiapas</strong> · Desarrollo de Aplicaciones Web y Móviles</p>
+            <p>Datos de tipo de cambio: <a href="https://frankfurter.dev" target="_blank" rel="noopener">Frankfurter</a>
+               (Banco Central Europeo), con <a href="https://open.er-api.com" target="_blank" rel="noopener">ExchangeRate&#8209;API</a> como respaldo.</p>
+        </footer>
+
+    </div>
+
+    <script src="js/cursos.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
