@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte de práctica — SPA responsiva</title>
+<style>
+@page { size: Letter; margin: 18mm 16mm; }
+
+:root {
+    --azul: #123a5e;
+    --azul-claro: #1e5c92;
+    --dorado: #c9a227;
+    --texto: #2b3440;
+    --suave: #5c6672;
+    --borde: #d8dee6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--texto);
+    font-size: 11pt;
+    line-height: 1.55;
+}
+
+.salto { page-break-after: always; }
+
+/* ===== Portada ===== */
+.portada {
+    height: 228mm;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding-top: 6mm;
+}
+
+.portada img.escudo { width: 30mm; margin: 0 auto 7mm; }
+
+.portada .universidad {
+    font-family: Georgia, serif;
+    font-size: 17pt;
+    color: var(--azul);
+    line-height: 1.3;
+}
+
+.portada .escuela {
+    font-size: 11.5pt;
+    color: var(--suave);
+    margin-top: 3mm;
+}
+
+.regla {
+    width: 46mm; height: 2.4pt;
+    background: var(--dorado);
+    margin: 7mm auto;
+    border-radius: 2pt;
+}
+
+.portada .materia {
+    font-size: 12pt;
+    font-weight: 600;
+    letter-spacing: 0.4pt;
+    text-transform: uppercase;
+    color: var(--suave);
+}
+
+.portada .titulo {
+    font-family: Georgia, serif;
+    font-size: 25pt;
+    line-height: 1.25;
+    color: var(--azul);
+    margin: 6mm auto 4mm;
+    max-width: 145mm;
+}
+
+.portada .subtitulo {
+    font-size: 12pt;
+    color: var(--suave);
+    font-style: italic;
+}
+
+.datos {
+    margin: auto auto 0;
+    width: 130mm;
+    border-top: 1pt solid var(--borde);
+    padding-top: 7mm;
+    text-align: left;
+}
+
+.datos div {
+    display: flex;
+    justify-content: space-between;
+    padding: 2.4mm 0;
+    border-bottom: 0.5pt dotted var(--borde);
+    font-size: 11pt;
+}
+
+.datos dt {
+    font-weight: 600;
+    color: var(--suave);
+    font-size: 9.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.4pt;
+    padding-top: 1pt;
+}
+
+.datos dd { text-align: right; font-weight: 600; }
+
+.fecha { margin-top: 7mm; font-size: 10.5pt; color: var(--suave); }
+
+/* ===== Cuerpo ===== */
+h2 {
+    font-family: Georgia, serif;
+    font-size: 15pt;
+    color: var(--azul);
+    margin: 9mm 0 2mm;
+    padding-bottom: 1.6mm;
+    border-bottom: 1.6pt solid var(--dorado);
+}
+
+h2:first-of-type { margin-top: 0; }
+
+h3 {
+    font-size: 11.5pt;
+    color: var(--azul);
+    margin: 6mm 0 1.5mm;
+}
+
+p { margin-bottom: 2.6mm; text-align: justify; }
+
+ul, ol { margin: 0 0 3mm 6mm; }
+li { margin-bottom: 1.2mm; }
+
+code {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 9pt;
+    background: #f1f4f8;
+    border: 0.5pt solid var(--borde);
+    border-radius: 2pt;
+    padding: 0.4pt 2pt;
+}
+
+pre {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 8.5pt;
+    line-height: 1.45;
+    background: #f7f9fb;
+    border: 0.5pt solid var(--borde);
+    border-left: 2.4pt solid var(--azul-claro);
+    border-radius: 3pt;
+    padding: 3mm 4mm;
+    margin-bottom: 3mm;
+    white-space: pre-wrap;
+    page-break-inside: avoid;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin-bottom: 3mm;
+    page-break-inside: avoid;
+}
+
+th, td {
+    border: 0.5pt solid var(--borde);
+    padding: 2mm 2.6mm;
+    text-align: left;
+    vertical-align: top;
+}
+
+th { background: #eef2f6; color: var(--azul); font-size: 9.5pt; }
+
+td code { font-size: 8pt; }
+
+figure { margin: 3mm 0 5mm; page-break-inside: avoid; }
+
+figure img {
+    display: block;
+    max-width: 100%;
+    max-height: 180mm;
+    width: auto;
+    margin: 0 auto;
+    border: 0.5pt solid var(--borde);
+    border-radius: 3pt;
+}
+
+figcaption {
+    font-size: 9pt;
+    color: var(--suave);
+    text-align: center;
+    margin-top: 1.6mm;
+    font-style: italic;
+}
+
+.dos { display: flex; gap: 4mm; }
+.dos figure { flex: 1; min-width: 0; }
+.dos img { max-height: 150mm; }
+
+.enlaces {
+    border: 0.8pt solid var(--azul);
+    border-radius: 3pt;
+    padding: 4mm 5mm;
+    margin: 3mm 0 4mm;
+    background: #f7fafc;
+    page-break-inside: avoid;
+}
+
+.enlaces div { margin-bottom: 3mm; }
+.enlaces div:last-child { margin-bottom: 0; }
+
+.enlaces dt {
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    color: var(--suave);
+    margin-bottom: 0.8mm;
+}
+
+.enlaces dd {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 9.5pt;
+    color: var(--azul);
+    word-break: break-all;
+}
+
+.nota {
+    font-size: 9.5pt;
+    color: var(--suave);
+    border-left: 2pt solid var(--dorado);
+    padding-left: 3mm;
+    margin: 3mm 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ================= PORTADA ================= -->
+<section class="portada salto">
+    <img class="escudo" src="img/logo-unach.png" alt="Escudo UNACH">
+
+    <div class="universidad">Universidad Autónoma de Chiapas</div>
+    <div class="escuela">Escuela de Tecnologías Digitales Aplicadas · Campus IV</div>
+
+    <div class="regla"></div>
+
+    <div class="materia">Desarrollo de Aplicaciones Web y Móviles</div>
+
+    <h1 class="titulo">Práctica: Desarrollar una aplicación web SPA Responsiva</h1>
+    <div class="subtitulo">Reporte de práctica</div>
+
+    <dl class="datos">
+        <div><dt>Alumno</dt><dd>Ezequiel Peña Mazariegos</dd></div>
+        <div><dt>Matrícula</dt><dd>100017097</dd></div>
+        <div><dt>Semestre y grupo</dt><dd>7.º semestre · Grupo A</dd></div>
+        <div><dt>Docente</dt><dd>Dr. Christian Mauricio Castillo Estrada</dd></div>
+    </dl>
+
+    <div class="fecha">Tuxtla Gutiérrez, Chiapas · 5 de septiembre de 2026</div>
+</section>
+
+<!-- ================= CUERPO ================= -->
+<section>
+
+<h2>1. Objetivo</h2>
+<p>Desarrollar una aplicación web bajo el estilo arquitectónico SPA
+(<em>Single Page Application</em>) con diseño responsivo, que presente la
+oferta académica de una institución mediante un conjunto de tarjetas,
+tomando como referencia la plataforma gubernamental SaberesMX. La aplicación
+debe mostrar el precio de cada curso en tres monedas, obteniendo el tipo de
+cambio desde una API REST.</p>
+
+<h2>2. Enlaces de entrega</h2>
+
+<dl class="enlaces">
+    <div>
+        <dt>Repositorio de código (GitHub)</dt>
+        <dd>https://github.com/Ezequielpm/portafolio-dawm</dd>
+    </div>
+    <div>
+        <dt>Aplicación publicada (hosting)</dt>
+        <dd>https://ezequielpm.github.io/portafolio-dawm/actividades/02-cursos-monedas/</dd>
+    </div>
+    <div>
+        <dt>Portafolio de actividades de la materia</dt>
+        <dd>https://ezequielpm.github.io/portafolio-dawm/</dd>
+    </div>
+</dl>
+
+<p class="nota">La aplicación se encuentra publicada en GitHub Pages, servicio
+de hospedaje de sitios estáticos. El sitio se sirve por HTTPS y se actualiza
+automáticamente con cada versión enviada al repositorio, por lo que el
+código publicado y el que se ejecuta en línea son siempre el mismo.</p>
+
+<h2>3. Tecnologías utilizadas</h2>
+
+<table>
+    <tr><th style="width:30%">Tecnología</th><th>Función dentro del proyecto</th></tr>
+    <tr><td>HTML5</td><td>Estructura semántica de la página única (SPA).</td></tr>
+    <tr><td>CSS3</td><td>Presentación, rejilla responsiva con CSS Grid, <em>media queries</em> y el efecto de ampliación en las imágenes.</td></tr>
+    <tr><td>JavaScript / jQuery 3.7.1</td><td>Generación dinámica de las tarjetas, petición a la API REST y recálculo de precios.</td></tr>
+    <tr><td>API REST Frankfurter</td><td>Tipo de cambio oficial del Banco Central Europeo. Servicio gratuito y sin llave de acceso.</td></tr>
+    <tr><td>API REST ExchangeRate-API</td><td>Servicio de respaldo, empleado si el principal no responde.</td></tr>
+    <tr><td>Git y GitHub Pages</td><td>Control de versiones y publicación del sitio.</td></tr>
+</table>
+
+<h2>4. Estructura del proyecto</h2>
+<pre>portafolio-dawm/
+├── index.html                    Portada del portafolio de la materia
+├── assets/                       Recursos compartidos (CSS, JS, imágenes)
+└── actividades/
+    └── 02-cursos-monedas/        Aplicación de esta práctica
+        ├── index.html            Página única (SPA)
+        ├── css/estilos.css       Estilos y diseño responsivo
+        └── js/
+            ├── cursos.js         Datos de los 6 cursos (precio fijo en MXN)
+            └── app.js            Conexión a la API y dibujado de la interfaz</pre>
+
+<p>La aplicación es una SPA: toda la interfaz se resuelve en un solo documento
+<code>index.html</code>. No existe navegación entre páginas; el contenido se
+genera y se actualiza en el mismo documento mediante JavaScript.</p>
+
+<figure>
+    <img src="img/escritorio.png" alt="Vista general de la aplicación">
+    <figcaption>Figura 1. Vista general de la aplicación en escritorio, con los precios ya actualizados desde la API.</figcaption>
+</figure>
+
+</section>
+
+<section class="salto"></section>
+
+<section>
+
+<h2>5. Requerimiento funcional 1</h2>
+<p><strong>Rejilla responsiva con seis tarjetas de cursos.</strong> Se crearon
+seis fichas; cada una incluye logo, título, descripción y botón de inscripción.
+Conforme al requerimiento, el botón <em>no tiene ninguna acción programada</em>.</p>
+
+<p>El acomodo automático se resuelve con CSS Grid. La propiedad
+<code>auto-fill</code> calcula cuántas columnas caben en el ancho disponible y
+<code>minmax(280px, 1fr)</code> impide que una tarjeta se angoste más de 280 px:</p>
+
+<pre>.rejilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}</pre>
+
+<p>De esta forma la rejilla pasa de cuatro columnas en escritorio a tres, dos y
+finalmente una sola en teléfono, sin necesidad de fijar la cantidad de columnas
+en cada resolución. Se añadieron <em>media queries</em> en 1024 px, 860 px y
+520 px para ajustar márgenes y tipografía.</p>
+
+<figure>
+    <img src="img/catalogo.png" alt="Las seis tarjetas de cursos">
+    <figcaption>Figura 2. Las seis fichas de cursos acomodadas en tres columnas (1240 px). Cada una presenta logo, título, descripción y botón de inscripción.</figcaption>
+</figure>
+
+</section>
+
+<section class="salto"></section>
+
+<section>
+
+<h2>6. Diseño responsivo</h2>
+<p>Se verificó el comportamiento de la rejilla en tres resoluciones. En cada
+una se comprobó además que el ancho del documento no excediera el de la
+ventana, es decir, que no se produjera desplazamiento horizontal.</p>
+
+<div class="dos">
+    <figure>
+        <img src="img/tablet.png" alt="Vista en tableta">
+        <figcaption>Figura 3. Tableta (768 px): dos columnas.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/movil.png" alt="Vista en teléfono">
+        <figcaption>Figura 4. Teléfono (500 px): una columna.</figcaption>
+    </figure>
+</div>
+
+<h2>7. Requerimiento funcional 2</h2>
+<p><strong>Ampliación de la imagen al posicionar el cursor.</strong> Al colocar
+el puntero sobre la imagen del curso, esta aumenta un 10 % su tamaño mediante
+una transformación de CSS. El contenedor recorta el excedente con
+<code>overflow: hidden</code>, de modo que la tarjeta conserva sus dimensiones
+y el resto de la rejilla no se desacomoda:</p>
+
+<pre>.tarjeta-portada {
+    height: 140px;
+    overflow: hidden;          /* recorta la imagen cuando se agranda */
+}
+
+.portada-imagen {
+    transition: transform 0.35s ease;
+}
+
+.tarjeta-portada:hover .portada-imagen {
+    transform: scale(1.1);     /* 10 % mas grande */
+}</pre>
+
+<figure>
+    <img src="img/rf2-hover.png" alt="Efecto de ampliación al pasar el cursor">
+    <figcaption>Figura 5. La tarjeta central tiene el cursor encima: su imagen se muestra ampliada al 110 % respecto de las laterales.</figcaption>
+</figure>
+
+</section>
+
+<section class="salto"></section>
+
+<section>
+
+<h2>8. Requerimiento funcional 3</h2>
+<p><strong>Actualización de precios contra una API REST.</strong> El precio en
+pesos mexicanos es un valor fijo del catálogo, definido en
+<code>js/cursos.js</code>. Al pulsar el botón <em>Actualizar precios</em> se
+realiza la petición al servicio de tipo de cambio y se recalculan únicamente
+las monedas extranjeras: dólar estadounidense y yen japonés.</p>
+
+<table>
+    <tr><th style="width:22%">Servicio</th><th>Petición</th></tr>
+    <tr>
+        <td>Principal<br><small>Frankfurter</small></td>
+        <td><code>https://api.frankfurter.dev/v1/latest?base=MXN&amp;symbols=USD,JPY</code></td>
+    </tr>
+    <tr>
+        <td>Respaldo<br><small>ExchangeRate-API</small></td>
+        <td><code>https://open.er-api.com/v6/latest/MXN</code></td>
+    </tr>
+</table>
+
+<p>Ambos servicios son gratuitos y no requieren llave de acceso. El código
+consulta el principal y, si la petición falla, recurre automáticamente al de
+respaldo; si tampoco responde, conserva tasas de referencia y advierte al
+usuario que no hubo conexión.</p>
+
+<pre>function actualizarPrecios() {
+    $.getJSON(`https://api.frankfurter.dev/v1/latest?base=MXN&amp;symbols=USD,JPY`)
+        .done(function (data) {
+            aplicarTasas(data.rates, "Frankfurter", data.date);
+        })
+        .fail(function () {
+            $.getJSON("https://open.er-api.com/v6/latest/MXN")
+                .done(function (data) { ... })
+                .fail(function () { /* aviso de sin conexion */ });
+        });
+}
+
+function convertir(montoMXN, moneda) {
+    return montoMXN * (tasas[moneda] || 1);
+}</pre>
+
+<p>El formato de cada cantidad se resuelve con <code>Intl.NumberFormat</code>,
+que aplica el símbolo, el separador de miles y la cantidad de decimales que
+corresponden a cada moneda; por ello el yen se presenta sin decimales.</p>
+
+<figure>
+    <img src="img/rf3-antes.png" alt="Panel de tipo de cambio antes de actualizar">
+    <figcaption>Figura 6. Estado inicial: la aplicación muestra tasas de referencia e indica que debe pulsarse el botón.</figcaption>
+</figure>
+
+<figure>
+    <img src="img/rf3-despues.png" alt="Panel de tipo de cambio después de actualizar">
+    <figcaption>Figura 7. Después de pulsar <em>Actualizar precios</em>: se confirma la fuente y la fecha del tipo de cambio obtenido.</figcaption>
+</figure>
+
+<h2>9. Conclusiones</h2>
+<p>La práctica permitió aplicar CSS Grid como mecanismo de maquetación
+responsiva y comprobar que <code>auto-fill</code> con <code>minmax()</code>
+resuelve el acomodo de las tarjetas sin declarar la cantidad de columnas para
+cada resolución, lo que reduce considerablemente el número de
+<em>media queries</em> necesarias.</p>
+
+<p>En cuanto al consumo del servicio externo, se identificó la conveniencia de
+prever la falla de la API: una aplicación que depende de un servicio de
+terceros debe seguir siendo utilizable cuando este no responde. Por ello se
+implementó un servicio de respaldo y un conjunto de tasas de referencia, con
+un aviso explícito al usuario sobre el origen de los datos que está viendo.</p>
+
+<p>Finalmente, separar los datos de los cursos (<code>cursos.js</code>) de la
+lógica de la interfaz (<code>app.js</code>) facilitó modificar el catálogo sin
+tocar el código de presentación, criterio que se conservará en las siguientes
+actividades del portafolio.</p>
+
+</section>
+
+</body>
+</html>

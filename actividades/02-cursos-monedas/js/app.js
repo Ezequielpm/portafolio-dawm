@@ -117,11 +117,15 @@ function pintarTasas() {
                     minimumFractionDigits: 4, maximumFractionDigits: 6
                 }).format(tasas[codigo])} ${codigo}`;
 
+        const marca = (codigo === MONEDA_BASE)
+            ? '<span class="tasa-marca">Fijo</span>'
+            : "";
+
         $lista.append(`
-            <div class="tasa ${codigo === MONEDA_BASE ? "tasa-base" : ""}">
+            <div class="tasa">
                 <span class="tasa-bandera">${MONEDAS[codigo].bandera}</span>
                 <div>
-                    <span class="tasa-codigo">${codigo} <small>${MONEDAS[codigo].nombre}</small></span>
+                    <span class="tasa-codigo">${codigo} <small>${MONEDAS[codigo].nombre}</small>${marca}</span>
                     <span class="tasa-valor">${texto}</span>
                 </div>
             </div>
