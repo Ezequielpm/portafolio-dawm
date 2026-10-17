@@ -13,6 +13,10 @@
 --  OJO: borra y vuelve a crear la base «gestion_documentos».
 -- ============================================================
 
+-- Las horas de los datos de prueba están en hora del centro de México;
+-- así se guardan bien aunque el servidor MySQL esté en otra zona horaria.
+SET time_zone = '-06:00';
+
 DROP DATABASE IF EXISTS gestion_documentos;
 
 CREATE DATABASE gestion_documentos

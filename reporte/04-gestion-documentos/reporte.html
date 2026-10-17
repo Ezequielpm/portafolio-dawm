@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte técnico — Gestión de Documentos</title>
+<style>
+@page { size: Letter; margin: 18mm 16mm; }
+
+:root {
+    --azul: #123a5e;
+    --azul-claro: #1e5c92;
+    --dorado: #c9a227;
+    --texto: #2b3440;
+    --suave: #5c6672;
+    --borde: #d8dee6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--texto);
+    font-size: 11pt;
+    line-height: 1.55;
+}
+
+.salto { page-break-after: always; }
+
+/* ===== Portada ===== */
+.portada {
+    height: 232mm;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.encabezado-portada {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6mm;
+    text-align: left;
+    padding-bottom: 5mm;
+    border-bottom: 1.6pt solid var(--dorado);
+}
+
+.encabezado-portada img.escudo { width: 20mm; flex-shrink: 0; }
+
+.portada .universidad {
+    font-family: Georgia, serif;
+    font-size: 15pt;
+    color: var(--azul);
+    line-height: 1.25;
+}
+
+.portada .escuela {
+    font-size: 10pt;
+    color: var(--suave);
+    margin-top: 1mm;
+}
+
+.bloque-titulo { padding: 12mm 0 9mm; }
+
+.portada .materia {
+    font-size: 10.5pt;
+    font-weight: 600;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    color: var(--dorado);
+}
+
+.portada .practica {
+    font-size: 10.5pt;
+    font-weight: 600;
+    letter-spacing: 0.6pt;
+    text-transform: uppercase;
+    color: var(--suave);
+    margin-top: 6mm;
+}
+
+.portada .titulo {
+    font-family: Georgia, serif;
+    font-size: 24pt;
+    line-height: 1.22;
+    color: var(--azul);
+    margin: 2.5mm auto 0;
+    max-width: 142mm;
+}
+
+.vitrina {
+    padding: 0 4mm;
+    margin-bottom: auto;
+}
+
+.vitrina img {
+    width: 100%;
+    border: 0.5pt solid var(--borde);
+    border-radius: 4pt;
+}
+
+.vitrina figcaption {
+    font-size: 8.5pt;
+    color: var(--suave);
+    font-style: italic;
+    margin-top: 2.5mm;
+}
+
+.datos {
+    width: 100%;
+    text-align: left;
+    border-top: 1pt solid var(--borde);
+    padding-top: 5mm;
+    margin-top: 8mm;
+}
+
+.datos div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 2mm 0;
+    border-bottom: 0.5pt dotted var(--borde);
+    font-size: 10.5pt;
+}
+
+.datos dt {
+    font-weight: 600;
+    color: var(--suave);
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.4pt;
+}
+
+.datos dd { text-align: right; font-weight: 600; }
+
+.fecha {
+    margin-top: 5mm;
+    font-size: 10pt;
+    color: var(--suave);
+    text-align: center;
+}
+
+/* ===== Cuerpo ===== */
+h2 {
+    font-family: Georgia, serif;
+    font-size: 15pt;
+    color: var(--azul);
+    margin: 9mm 0 2mm;
+    padding-bottom: 1.6mm;
+    border-bottom: 1.6pt solid var(--dorado);
+}
+
+h2:first-of-type { margin-top: 0; }
+
+h3 {
+    font-size: 11.5pt;
+    color: var(--azul);
+    margin: 6mm 0 1.5mm;
+}
+
+p { margin-bottom: 2.6mm; text-align: justify; }
+
+ul, ol { margin: 0 0 3mm 6mm; }
+li { margin-bottom: 1.2mm; }
+
+code {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 9pt;
+    background: #f1f4f8;
+    border: 0.5pt solid var(--borde);
+    border-radius: 2pt;
+    padding: 0.4pt 2pt;
+}
+
+pre {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 8.5pt;
+    line-height: 1.45;
+    background: #f7f9fb;
+    border: 0.5pt solid var(--borde);
+    border-left: 2.4pt solid var(--azul-claro);
+    border-radius: 3pt;
+    padding: 3mm 4mm;
+    margin-bottom: 3mm;
+    white-space: pre-wrap;
+    page-break-inside: avoid;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin-bottom: 3mm;
+    page-break-inside: avoid;
+}
+
+th, td {
+    border: 0.5pt solid var(--borde);
+    padding: 2mm 2.6mm;
+    text-align: left;
+    vertical-align: top;
+}
+
+th { background: #eef2f6; color: var(--azul); font-size: 9.5pt; }
+
+td code { font-size: 8pt; }
+
+figure { margin: 3mm 0 5mm; page-break-inside: avoid; }
+
+figure img {
+    display: block;
+    max-width: 100%;
+    max-height: 180mm;
+    width: auto;
+    margin: 0 auto;
+    border: 0.5pt solid var(--borde);
+    border-radius: 3pt;
+}
+
+figcaption {
+    font-size: 9pt;
+    color: var(--suave);
+    text-align: center;
+    margin-top: 1.6mm;
+    font-style: italic;
+}
+
+.dos { display: flex; gap: 4mm; }
+.dos figure { flex: 1; min-width: 0; }
+.dos img { max-height: 150mm; }
+
+.enlaces {
+    border: 0.8pt solid var(--azul);
+    border-radius: 3pt;
+    padding: 4mm 5mm;
+    margin: 3mm 0 4mm;
+    background: #f7fafc;
+    page-break-inside: avoid;
+}
+
+.enlaces div { margin-bottom: 3mm; }
+.enlaces div:last-child { margin-bottom: 0; }
+
+.enlaces dt {
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    color: var(--suave);
+    margin-bottom: 0.8mm;
+}
+
+.enlaces dd {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 9.5pt;
+    color: var(--azul);
+    word-break: break-all;
+}
+
+.nota {
+    font-size: 9.5pt;
+    color: var(--suave);
+    border-left: 2pt solid var(--dorado);
+    padding-left: 3mm;
+    margin: 3mm 0;
+}
+
+/* ===== Ajustes de este reporte ===== */
+.datos dd.url { font-family: Menlo, Consolas, monospace; font-size: 8.6pt; color: var(--azul); max-width: 118mm; word-break: break-all; }
+.portada { height: auto; }
+.vitrina img { max-height: 72mm; object-fit: cover; object-position: top; }
+.bloque-titulo { padding: 6mm 0 5mm; }
+.portada .datos { margin-top: 5mm; padding-top: 3mm; }
+.portada .datos div { padding: 1.5mm 0; }
+.cuatro { display: flex; gap: 3mm; margin-bottom: 2mm; }
+.cuatro figure { flex: 1; min-width: 0; margin: 0; }
+.cuatro img { width: 100%; max-height: none; }
+.cuatro figcaption { font-size: 8pt; }
+.dos img { max-height: 70mm; }
+figure img { max-height: 82mm; }
+h2, h3 { page-break-after: avoid; break-after: avoid; }
+</style>
+
+</head>
+<body>
+<!-- ================= PORTADA ================= -->
+<section class="portada salto">
+    <div class="encabezado-portada">
+        <img class="escudo" src="img/logo-unach.png" alt="Escudo UNACH">
+        <div>
+            <div class="universidad">Universidad Autónoma de Chiapas</div>
+            <div class="escuela">Escuela de Tecnologías Digitales Aplicadas · Campus IV Tapachula</div>
+        </div>
+    </div>
+
+    <div class="bloque-titulo">
+        <div class="materia">Desarrollo de Aplicaciones Web y Móviles</div>
+        <div class="practica">Laboratorio práctico · Reporte técnico</div>
+        <h1 class="titulo">Sistema de Gestión de Documentos de una Oficina</h1>
+    </div>
+
+    <figure class="vitrina">
+        <img src="img/detalle.jpg" alt="Detalle de un oficio con su PDF digitalizado">
+        <figcaption>Detalle de un oficio: datos, estatus, seguimiento y visor del PDF digitalizado.</figcaption>
+    </figure>
+
+    <dl class="datos">
+        <div><dt>Estudiante</dt><dd>Ezequiel Peña Mazariegos</dd></div>
+        <div><dt>Matrícula</dt><dd>100017097</dd></div>
+        <div><dt>Semestre y grupo</dt><dd>7.º semestre · Grupo A</dd></div>
+        <div><dt>Docente</dt><dd>Dr. Christian Mauricio Castillo Estrada</dd></div>
+        <div><dt>URL del dominio (Vercel)</dt><dd class="url">https://gestion-documentos-unach-six.vercel.app</dd></div>
+        <div><dt>GitHub</dt><dd class="url">https://github.com/Ezequielpm/portafolio-dawm/tree/main/actividades/04-gestion-documentos</dd></div>
+    </dl>
+
+    <div class="fecha">Tapachula, Chiapas · 16 de octubre de 2026</div>
+</section>
+
+<!-- ================= CUERPO ================= -->
+<section>
+<h2>1. Problemática y objetivo</h2>
+<p>En una oficina se reciben a diario oficios, circulares, solicitudes e
+invitaciones impresos. Gestionados solo en papel se traspapelan, se archivan en
+la categoría equivocada y localizarlos por número de oficio, remitente o fecha
+toma demasiado tiempo, lo que retrasa la atención de los asuntos.</p>
+<p>El objetivo fue desarrollar una aplicación web responsiva que permita
+<strong>recibir, digitalizar, registrar, buscar, actualizar el estatus y
+consultar el PDF</strong> de cada documento, desde el celular o la computadora,
+con Bootstrap, jQuery, PHP y MySQL, y publicarla en un dominio de Vercel.</p>
+
+<h2>2. Tecnologías y arquitectura</h2>
+<table>
+    <tr><th style="width:27%">Capa</th><th>Tecnología y función</th></tr>
+    <tr><td>Interfaz</td><td>HTML5, CSS3 y <strong>Bootstrap 5.3</strong>: rejilla, formularios con validación, tabla, paginación, <em>dropdown</em>, <em>offcanvas</em>, <em>modal</em> y <em>toasts</em>. Enfoque Mobile First.</td></tr>
+    <tr><td>Lógica del cliente</td><td><strong>jQuery 3.7</strong>: navegación entre vistas (SPA por fragmento <code>#</code>), peticiones AJAX a la API, cámara y conversión de fotos con <code>&lt;canvas&gt;</code>.</td></tr>
+    <tr><td>Servidor</td><td><strong>PHP 8.3</strong>: API de 7 <em>endpoints</em> que responden JSON, con PDO y sentencias preparadas.</td></tr>
+    <tr><td>Base de datos</td><td><strong>MySQL 8.4</strong> en Aiven (plan gratuito), conexión cifrada con TLS.</td></tr>
+    <tr><td>Publicación</td><td><strong>Vercel</strong> con el runtime <code>vercel-php</code>; código en GitHub.</td></tr>
+</table>
+
+<pre>Navegador (HTML + Bootstrap + jQuery)
+    │  AJAX (JSON / multipart)
+    ▼
+Vercel ── archivos estáticos: index.html, css/, js/, img/
+   └──── funciones PHP: api/listar · obtener · guardar · estatus · eliminar · pdf · sugerencias
+              │  PDO + TLS
+              ▼
+         MySQL 8.4 (Aiven) ── documentos · bitacora_estatus · archivos_pdf</pre>
+
+<p>Vercel no ejecuta PHP de forma nativa, así que <code>vercel.json</code>
+asigna el runtime <code>vercel-php</code> a la carpeta <code>api/</code>. Además,
+el disco de una función de Vercel se borra entre peticiones, por lo que los PDF
+no se guardan en una carpeta sino en MySQL. Las credenciales no están en el
+código: se leen de variables de entorno configuradas en Vercel, y las carpetas
+internas (<code>includes/</code>, <code>sql/</code>) no se pueden descargar.</p>
+
+<h2>3. Base de datos</h2>
+<p>La base <code>gestion_documentos</code> contiene el modelo mínimo pedido
+más dos tablas de apoyo:</p>
+<table>
+    <tr><th style="width:22%">Tabla</th><th>Contenido</th></tr>
+    <tr><td><code>documentos</code></td><td><code>id_documento</code> (PK), <code>no_oficio</code> (UNIQUE), <code>fecha</code>, <code>asunto</code>, <code>remitente</code>, <code>destinatario</code>, <code>estatus</code> ENUM('Recibido','En proceso','Atendido'), <code>archivo_pdf</code>, <code>creado_en</code>, <code>actualizado_en</code>. Índices en <code>fecha</code>, <code>(estatus, fecha)</code>, <code>remitente</code> y <code>destinatario</code>, que son los filtros del listado.</td></tr>
+    <tr><td><code>bitacora_estatus</code></td><td>Un renglón por cada cambio de estatus (anterior, nuevo y hora) para dar seguimiento. FK con <code>ON DELETE CASCADE</code>.</td></tr>
+    <tr><td><code>archivos_pdf</code></td><td>Contenido del PDF (<code>MEDIUMBLOB</code>) y su tamaño. Separada para que el listado no cargue archivos. FK con <code>ON DELETE CASCADE</code>.</td></tr>
+</table>
+<p>El script <code>sql/gestion_documentos.sql</code> crea la base, las tablas,
+los índices y seis documentos de prueba con su historial y sus PDF.</p>
+</section>
+
+<section>
+<h2>4. Funcionalidades</h2>
+
+<h3>4.1 Panel, listado, búsqueda y filtros</h3>
+<p>El panel de inicio muestra el conteo por estatus; cada tarjeta abre el
+listado ya filtrado. La campana de la barra superior avisa cuántos documentos
+siguen como «Recibido». El listado busca mientras se escribe en todos los
+campos o en uno (oficio, asunto, remitente, destinatario) y filtra por estatus
+y rango de fechas, con paginación. Cada fila permite ver, descargar, editar y
+eliminar; el estatus se cambia ahí mismo desde su insignia.</p>
+<figure>
+    <img src="img/busqueda.jpg" alt="Listado filtrado por la palabra Dirección">
+    <figcaption>Figura 1. Búsqueda «Dirección» en la versión publicada: 3 coincidencias por remitente o destinatario.</figcaption>
+</figure>
+<div class="dos">
+    <figure>
+        <img src="img/inicio.png" alt="Panel de inicio en escritorio">
+        <figcaption>Figura 2. Panel con conteo por estatus y documentos recientes.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/pendientes.png" alt="Menú de pendientes">
+        <figcaption>Figura 3. Campana de pendientes (<em>dropdown</em> de Bootstrap).</figcaption>
+    </figure>
+</div>
+
+<h3>4.2 Registro y digitalización</h3>
+<p>El formulario captura No. de oficio, fecha, asunto, remitente,
+destinatario y estatus. El botón <strong>Tomar foto</strong> usa
+<code>capture="environment"</code> para abrir la cámara trasera del celular;
+<strong>Seleccionar archivo</strong> acepta un PDF o varias imágenes. El
+navegador reduce cada foto a 2000 px con un <code>&lt;canvas&gt;</code> y el
+servidor arma con ellas un PDF tamaño carta, una página por foto, escrito en
+PHP puro (el formato PDF admite JPEG de forma nativa). Si se sube un PDF, el
+servidor revisa su contenido real, no la extensión.</p>
+<p>La validación se hace dos veces: en el navegador, con las clases
+<code>is-invalid</code> e <code>invalid-feedback</code> de Bootstrap, para avisar
+rápido; y en el servidor, que es la que cuenta: campos obligatorios,
+longitudes, fecha real y no futura, oficio no repetido y tipo y tamaño del
+archivo (4 MB como máximo, por el límite de Vercel).</p>
+</section>
+
+<section>
+<div class="cuatro">
+    <figure>
+        <img src="img/movil-inicio.png" alt="Inicio en celular">
+        <figcaption>Figura 4. Inicio en celular (390 px).</figcaption>
+    </figure>
+    <figure>
+        <img src="img/movil-errores.png" alt="Formulario con errores">
+        <figcaption>Figura 5. Registro con validación.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/movil-docs.png" alt="Listado en celular">
+        <figcaption>Figura 6. Listado como tarjetas.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/movil-ver.png" alt="Detalle en celular">
+        <figcaption>Figura 7. Detalle y cambio de estatus.</figcaption>
+    </figure>
+</div>
+
+<h3>4.3 Estatus, seguimiento y PDF</h3>
+<p>En el detalle (portada del reporte) se cambia el estatus entre
+<em>Recibido</em>, <em>En proceso</em> y <em>Atendido</em>; cada cambio queda en la
+bitácora con su hora, dentro de una transacción. El PDF se consulta en un visor
+dentro de la plataforma y se puede abrir en otra pestaña o descargar con el
+nombre <code>Oficio_003-2026.pdf</code>. Solo se entrega por
+<code>api/pdf.php</code>, que lo busca por el registro.</p>
+
+<h3>4.4 Diseño responsivo</h3>
+<p>Con la rejilla y los <em>breakpoints</em> de Bootstrap, en celular la
+navegación va en una barra inferior con el botón central «+», el menú lateral
+se abre como <em>offcanvas</em> y el listado se muestra como tarjetas; desde
+992 px el menú queda fijo a la izquierda y el listado es una tabla.</p>
+
+<h2>5. Seguridad aplicada</h2>
+<ul>
+    <li>Sentencias preparadas de PDO en todas las consultas; los nombres de columna del buscador salen de una lista fija.</li>
+    <li>Todo texto que viene de la base se escapa antes de insertarlo en el HTML (evita XSS).</li>
+    <li>Las peticiones que modifican datos exigen el encabezado <code>X-Requested-With</code> (protección básica contra CSRF).</li>
+    <li>Credenciales en variables de entorno de Vercel; conexión a MySQL cifrada con TLS y certificado verificado.</li>
+    <li>Errores internos al log del servidor; al usuario solo le llega un mensaje general.</li>
+</ul>
+</section>
+
+<section>
+<h2>6. Pruebas</h2>
+<p>Se probaron sobre la versión publicada en Vercel con la base de Aiven y en una copia local con el mismo código:</p>
+<table>
+    <tr><th style="width:52%">Prueba</th><th>Resultado</th></tr>
+    <tr><td>Registro con 2 fotografías JPEG</td><td>PDF de 2 páginas generado y visible en el visor</td></tr>
+    <tr><td>Registro con un PDF</td><td>Se guarda y se descarga íntegro</td></tr>
+    <tr><td>Archivo de texto renombrado a <code>.pdf</code></td><td>Rechazado: «no es un PDF válido»</td></tr>
+    <tr><td>No. de oficio repetido / fecha futura</td><td>Error marcado en el campo correspondiente</td></tr>
+    <tr><td>Búsqueda «Dirección» y filtro estatus + texto</td><td>3 y 1 coincidencias, respectivamente</td></tr>
+    <tr><td>Cambio de estatus Recibido → Atendido</td><td>Actualizado y registrado en el historial con la hora de México</td></tr>
+    <tr><td>Edición con un PDF nuevo</td><td>Reemplaza al anterior</td></tr>
+    <tr><td>Eliminación</td><td>Borra registro, historial y PDF; el PDF responde 404</td></tr>
+    <tr><td>POST sin <code>X-Requested-With</code></td><td>403 «Petición no permitida»</td></tr>
+    <tr><td><code>includes/config.php</code>, <code>api/php.ini</code>, <code>sql/</code> desde el navegador</td><td>403 / 404: no se pueden descargar</td></tr>
+    <tr><td>Vistas a 390 px y 1440 px</td><td>Sin desbordamiento; tarjetas en celular, tabla en escritorio</td></tr>
+</table>
+
+<h2>7. Conclusiones</h2>
+<p>La aplicación cubre el flujo completo que pide la práctica
+(recibir → digitalizar → registrar → buscar → actualizar estatus → consultar
+PDF) y funciona igual en celular y en escritorio. Bootstrap aceleró la
+construcción de una interfaz responsiva y consistente, mientras que jQuery y
+una API en PHP mantuvieron separadas la presentación y la lógica del servidor.</p>
+<p>Publicar en Vercel obligó a decisiones que en XAMPP no aparecen: los PDF se
+guardaron en MySQL porque el disco del servidor no es permanente, las
+credenciales pasaron a variables de entorno y la conexión a la base en la nube
+se cifró. El resultado es un sistema que reduce el riesgo de extravío de los
+documentos y permite localizarlos y darles seguimiento en segundos.</p>
+</section>
+
+</body>
+</html>
