@@ -1,0 +1,4 @@
+# php.ini es para Vercel; en Apache no debe poder descargarse.
+<Files "php.ini">
+    Require all denied
+</Files>

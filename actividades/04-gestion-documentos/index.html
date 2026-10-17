@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#123a5e">
+    <meta name="description" content="Sistema de gestión de documentos de una oficina: registro, digitalización, búsqueda y seguimiento de oficios.">
+    <title>Gestión de Documentos | UNACH</title>
+    <link rel="icon" href="img/logo-unach.png">
+    <!-- Bootstrap 5 (copia local, funciona sin internet) y los estilos propios encima. -->
+    <link rel="stylesheet" href="css/vendor/bootstrap-5.3.3.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+    <!-- ===== Íconos (se usan con <svg><use href="#i-..."></svg>) ===== -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none" aria-hidden="true">
+        <symbol id="i-inicio" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+        <symbol id="i-documentos" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+        <symbol id="i-mas" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+        <symbol id="i-buscar" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+        <symbol id="i-ver" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+        <symbol id="i-descargar" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></symbol>
+        <symbol id="i-editar" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m14 6 4 4"/></symbol>
+        <symbol id="i-eliminar" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+        <symbol id="i-camara" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></symbol>
+        <symbol id="i-subir" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></symbol>
+        <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+        <symbol id="i-externo" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+        <symbol id="i-filtro" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></symbol>
+        <symbol id="i-atras" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+        <symbol id="i-campana" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+        <symbol id="i-usuario" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+        <symbol id="i-pdf" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M8.5 15.5v-3h1a1 1 0 0 1 0 2h-1M12.5 12.5v3h.8a1.5 1.5 0 0 0 0-3zM16.5 15.5v-3h1.5M16.5 14h1.2"/></symbol>
+    </svg>
+
+    <!-- ===== Barra superior ===== -->
+    <header class="navbar navbar-dark barra-superior sticky-top">
+        <div class="container-fluid flex-nowrap gap-2">
+            <button class="btn btn-link text-white p-1 d-lg-none" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#menu-lateral" aria-controls="menu-lateral"
+                    aria-label="Abrir menú">
+                <svg class="icono-lg"><use href="#i-menu"/></svg>
+            </button>
+
+            <a class="navbar-brand marca me-auto" href="#inicio">
+                <img src="img/logo-unach.png" alt="Logotipo UNACH">
+                <span class="marca-unach d-none d-md-block"><strong>UNACH</strong><small>Universidad Autónoma de Chiapas</small></span>
+                <span class="marca-sistema"><strong>Gestión de Documentos</strong><small>Oficina Digital</small></span>
+            </a>
+
+            <!-- Pendientes: documentos que siguen como «Recibido». -->
+            <div class="dropdown">
+                <button class="btn btn-link text-white p-1 position-relative" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" aria-label="Documentos pendientes">
+                    <svg class="icono-lg"><use href="#i-campana"/></svg>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark"
+                          id="contador-pendientes" hidden></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end shadow menu-pendientes">
+                    <h6 class="dropdown-header">Pendientes de atender</h6>
+                    <div id="lista-pendientes"></div>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item small fw-semibold text-primary" href="#documentos" data-estatus="Recibido">Ver todos los recibidos</a>
+                </div>
+            </div>
+
+            <div class="usuario d-flex align-items-center gap-2">
+                <span class="avatar"><svg><use href="#i-usuario"/></svg></span>
+                <span class="d-none d-md-block lh-sm">
+                    <strong class="d-block small">Administrador</strong>
+                    <small class="text-white-50">ETDA · Campus IV</small>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <div class="d-lg-flex">
+
+        <!-- ===== Menú lateral: offcanvas en móvil, fijo desde lg (≥ 992 px) ===== -->
+        <aside class="offcanvas-lg offcanvas-start lateral" tabindex="-1" id="menu-lateral" aria-labelledby="menu-lateral-titulo">
+            <div class="offcanvas-header">
+                <h2 class="offcanvas-title h6 text-white" id="menu-lateral-titulo">Menú</h2>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                        data-bs-target="#menu-lateral" aria-label="Cerrar"></button>
+            </div>
+            <div class="offcanvas-body d-flex flex-column p-3">
+                <nav class="nav nav-pills flex-column gap-1" aria-label="Navegación principal">
+                    <a class="nav-link" href="#inicio" data-ruta="inicio"><svg><use href="#i-inicio"/></svg>Inicio</a>
+                    <a class="nav-link" href="#documentos" data-ruta="documentos"><svg><use href="#i-documentos"/></svg>Documentos</a>
+                    <a class="nav-link" href="#nuevo" data-ruta="nuevo"><svg><use href="#i-mas"/></svg>Nuevo documento</a>
+                    <a class="nav-link" href="#buscar" data-ruta="buscar"><svg><use href="#i-buscar"/></svg>Buscar</a>
+                </nav>
+                <p class="lateral-pie mt-auto mb-0 pt-4">ETDA · Campus IV Tapachula</p>
+            </div>
+        </aside>
+
+        <main class="contenido flex-grow-1">
+
+            <!-- ================= INICIO ================= -->
+            <section class="vista" id="vista-inicio" aria-labelledby="titulo-inicio">
+                <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-3">
+                    <div>
+                        <h1 class="h3 mb-0" id="titulo-inicio">Panel de documentos</h1>
+                        <p class="text-body-secondary small mb-0" id="fecha-hoy"></p>
+                    </div>
+                    <a class="btn btn-primary" href="#nuevo"><svg><use href="#i-mas"/></svg>Nuevo documento</a>
+                </div>
+
+                <div class="row row-cols-2 row-cols-md-4 g-3 mb-3">
+                    <div class="col">
+                        <a class="card tarjeta-resumen h-100" href="#documentos" data-estatus="">
+                            <div class="card-body">
+                                <span class="resumen-etiqueta">Total</span>
+                                <span class="resumen-numero" data-conteo="total">–</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a class="card tarjeta-resumen estatus-recibido h-100" href="#documentos" data-estatus="Recibido">
+                            <div class="card-body">
+                                <span class="resumen-etiqueta">Recibidos</span>
+                                <span class="resumen-numero" data-conteo="Recibido">–</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a class="card tarjeta-resumen estatus-en-proceso h-100" href="#documentos" data-estatus="En proceso">
+                            <div class="card-body">
+                                <span class="resumen-etiqueta">En proceso</span>
+                                <span class="resumen-numero" data-conteo="En proceso">–</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a class="card tarjeta-resumen estatus-atendido h-100" href="#documentos" data-estatus="Atendido">
+                            <div class="card-body">
+                                <span class="resumen-etiqueta">Atendidos</span>
+                                <span class="resumen-numero" data-conteo="Atendido">–</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h2 class="h6 mb-0">Recibidos recientemente</h2>
+                        <a class="small fw-semibold" href="#documentos">Ver todos</a>
+                    </div>
+                    <div class="list-group list-group-flush" id="lista-recientes"></div>
+                </div>
+
+                <ol class="flujo" aria-label="Flujo de atención de un documento">
+                    <li>Recibir</li>
+                    <li>Digitalizar</li>
+                    <li>Registrar</li>
+                    <li>Buscar</li>
+                    <li>Actualizar estatus</li>
+                    <li>Consultar PDF</li>
+                </ol>
+            </section>
+
+            <!-- ================= LISTADO ================= -->
+            <section class="vista" id="vista-documentos" aria-labelledby="titulo-documentos">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+                            <h1 class="h3 mb-0 d-flex align-items-center gap-2" id="titulo-documentos">
+                                <svg class="icono-lg text-primary"><use href="#i-documentos"/></svg>Listado de documentos
+                            </h1>
+                            <a class="btn btn-primary" href="#nuevo"><svg><use href="#i-mas"/></svg>Nuevo documento</a>
+                        </div>
+
+                        <form id="form-filtros" role="search">
+                            <div class="row g-2">
+                                <div class="col-12 col-md">
+                                    <label class="visually-hidden" for="f-q">Buscar</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white"><svg><use href="#i-buscar"/></svg></span>
+                                        <input type="search" class="form-control" id="f-q" name="q" maxlength="100"
+                                               placeholder="Buscar por no. de oficio, asunto, remitente o destinatario…">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-auto">
+                                    <label class="visually-hidden" for="f-campo">Buscar en</label>
+                                    <select class="form-select" id="f-campo" name="campo">
+                                        <option value="todos">Todos los campos</option>
+                                        <option value="no_oficio">No. de oficio</option>
+                                        <option value="asunto">Asunto</option>
+                                        <option value="remitente">Remitente</option>
+                                        <option value="destinatario">Destinatario</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row g-2 mt-1 align-items-end">
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label small text-body-secondary mb-1" for="f-estatus">Estatus</label>
+                                    <select class="form-select" id="f-estatus" name="estatus">
+                                        <option value="">Todos</option>
+                                        <option>Recibido</option>
+                                        <option>En proceso</option>
+                                        <option>Atendido</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label small text-body-secondary mb-1" for="f-desde">Desde</label>
+                                    <input type="date" class="form-control" id="f-desde" name="desde">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label small text-body-secondary mb-1" for="f-hasta">Hasta</label>
+                                    <input type="date" class="form-control" id="f-hasta" name="hasta">
+                                </div>
+                                <div class="col-12 col-md-3 d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary flex-fill"><svg><use href="#i-filtro"/></svg>Filtrar</button>
+                                    <button type="button" class="btn btn-outline-secondary flex-fill" id="btn-limpiar">Limpiar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Escritorio y tableta horizontal: tabla. -->
+                    <div class="table-responsive d-none d-lg-block">
+                        <table class="table table-hover align-middle mb-0 tabla-documentos">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">No. Oficio</th>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Asunto</th>
+                                    <th scope="col">Remitente</th>
+                                    <th scope="col">Destinatario</th>
+                                    <th scope="col">Estatus</th>
+                                    <th scope="col" class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo-tabla"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Celular: una tarjeta por documento. -->
+                    <div class="list-group list-group-flush d-lg-none border-top" id="lista-tarjetas"></div>
+
+                    <div class="card-footer bg-white d-flex flex-column flex-md-row align-items-center justify-content-between gap-2">
+                        <p class="small text-body-secondary mb-0" id="info-registros" aria-live="polite"></p>
+                        <nav aria-label="Paginación">
+                            <ul class="pagination pagination-sm mb-0" id="paginacion"></ul>
+                        </nav>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= REGISTRO / EDICIÓN ================= -->
+            <section class="vista" id="vista-formulario" aria-labelledby="titulo-formulario">
+                <a class="volver" href="#documentos"><svg><use href="#i-atras"/></svg>Volver al listado</a>
+
+                <form class="card formulario" id="form-documento" novalidate>
+                    <div class="card-body p-3 p-md-4">
+                        <h1 class="h4 mb-3 d-flex align-items-center gap-2">
+                            <svg class="icono-lg text-primary"><use href="#i-documentos"/></svg>
+                            <span id="titulo-formulario">Registrar documento</span>
+                        </h1>
+                        <input type="hidden" name="id" id="d-id">
+
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label" for="d-no_oficio">No. de oficio <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="d-no_oficio" name="no_oficio" maxlength="30"
+                                       placeholder="Ej. 0452/2026" required autocomplete="off">
+                                <div class="invalid-feedback" data-error="no_oficio"></div>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="form-label" for="d-fecha">Fecha <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="d-fecha" name="fecha" required>
+                                <div class="invalid-feedback" data-error="fecha"></div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label" for="d-asunto">Asunto <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="d-asunto" name="asunto" maxlength="200" rows="2"
+                                          placeholder="Descripción breve del asunto del documento" required></textarea>
+                                <div class="invalid-feedback" data-error="asunto"></div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <label class="form-label" for="d-remitente">Remitente <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="d-remitente" name="remitente" maxlength="150"
+                                       placeholder="Nombre o dependencia" required list="lista-remitentes">
+                                <div class="invalid-feedback" data-error="remitente"></div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <label class="form-label" for="d-destinatario">Destinatario <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="d-destinatario" name="destinatario" maxlength="150"
+                                       placeholder="Nombre o área" required list="lista-destinatarios">
+                                <div class="invalid-feedback" data-error="destinatario"></div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <label class="form-label" for="d-estatus">Estatus <span class="text-danger">*</span></label>
+                                <div class="select-con-punto">
+                                    <span class="punto" aria-hidden="true"></span>
+                                    <select class="form-select" id="d-estatus" name="estatus" required>
+                                        <option>Recibido</option>
+                                        <option>En proceso</option>
+                                        <option>Atendido</option>
+                                    </select>
+                                </div>
+                                <div class="invalid-feedback" data-error="estatus"></div>
+                            </div>
+                        </div>
+
+                        <!-- Sugerencias con los remitentes y destinatarios ya capturados. -->
+                        <datalist id="lista-remitentes"></datalist>
+                        <datalist id="lista-destinatarios"></datalist>
+
+                        <!-- ----- Digitalización ----- -->
+                        <fieldset class="mt-4">
+                            <legend class="form-label fs-6 fw-semibold">Documento (foto o PDF) <span class="text-danger" id="archivo-req">*</span></legend>
+
+                            <div class="alert alert-info small py-2" id="aviso-reemplazo" hidden>
+                                Este documento ya tiene un PDF.
+                                <a href="#" id="enlace-pdf-actual" class="alert-link" target="_blank" rel="noopener">Ver el actual</a>.
+                                Si agregas fotos o un PDF nuevo, reemplazarán al actual.
+                            </div>
+
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <!-- capture="environment" abre la cámara trasera en el celular;
+                                         en una computadora abre el selector de archivos. -->
+                                    <label class="boton-captura">
+                                        <input type="file" id="in-camara" accept="image/*" capture="environment">
+                                        <svg><use href="#i-camara"/></svg>
+                                        <span>Tomar foto<small>del documento</small></span>
+                                    </label>
+                                </div>
+                                <div class="col-6">
+                                    <label class="boton-captura">
+                                        <input type="file" id="in-archivo" accept="application/pdf,image/jpeg,image/png" multiple>
+                                        <svg><use href="#i-subir"/></svg>
+                                        <span>Seleccionar archivo<small>PDF o imágenes</small></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <p class="form-text">
+                                Puedes tomar varias fotos: cada una será una página del PDF.
+                                Máximo 4&nbsp;MB en total y 10 páginas.
+                            </p>
+
+                            <div class="vista-previa" id="vista-previa" aria-live="polite"></div>
+                            <div class="invalid-feedback d-block" data-error="archivo"></div>
+                        </fieldset>
+
+                        <div class="mt-3" id="progreso" hidden>
+                            <div class="progress" role="progressbar" aria-label="Avance de la subida" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0"></div>
+                            </div>
+                            <p class="small text-body-secondary mt-1 mb-0 progreso-texto">Subiendo…</p>
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-white p-3 d-grid d-sm-flex justify-content-sm-end gap-2">
+                        <a class="btn btn-outline-secondary order-2 order-sm-1" href="#documentos">Cancelar</a>
+                        <button type="submit" class="btn btn-primary btn-lg order-1 order-sm-2" id="btn-guardar">
+                            <svg><use href="#i-documentos"/></svg><span>Guardar documento</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- ================= DETALLE Y VISOR ================= -->
+            <section class="vista" id="vista-detalle" aria-labelledby="titulo-detalle">
+                <a class="volver" href="#documentos"><svg><use href="#i-atras"/></svg>Volver al listado</a>
+
+                <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-3">
+                    <div>
+                        <p class="text-body-secondary small mb-0">Oficio</p>
+                        <h1 class="h3 mb-0" id="titulo-detalle"></h1>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-outline-primary" id="det-editar" href="#"><svg><use href="#i-editar"/></svg>Editar</a>
+                        <button type="button" class="btn btn-danger" id="det-eliminar"><svg><use href="#i-eliminar"/></svg>Eliminar</button>
+                    </div>
+                </div>
+
+                <div class="row g-3 align-items-start">
+                    <div class="col-12 col-lg-5 col-xl-4 d-flex flex-column gap-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="h6 mb-3">Datos del documento</h2>
+                                <dl class="row datos mb-0" id="det-datos"></dl>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="h6 mb-3">Estatus</h2>
+                                <div class="btn-group w-100 selector-estatus" id="det-estatus" role="radiogroup" aria-label="Cambiar estatus">
+                                    <button type="button" class="btn" role="radio" data-estatus="Recibido">Recibido</button>
+                                    <button type="button" class="btn" role="radio" data-estatus="En proceso">En proceso</button>
+                                    <button type="button" class="btn" role="radio" data-estatus="Atendido">Atendido</button>
+                                </div>
+                                <h3 class="seccion-titulo">Seguimiento</h3>
+                                <ol class="historial" id="det-historial"></ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-7 col-xl-8">
+                        <div class="card visor">
+                            <div class="card-header bg-white d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                <h2 class="h6 mb-0">Documento digitalizado</h2>
+                                <div class="d-flex gap-2">
+                                    <a class="btn btn-sm btn-outline-secondary" id="det-abrir" href="#" target="_blank" rel="noopener"><svg><use href="#i-externo"/></svg>Abrir</a>
+                                    <a class="btn btn-sm btn-primary" id="det-descargar" href="#"><svg><use href="#i-descargar"/></svg>Descargar</a>
+                                </div>
+                            </div>
+                            <div class="card-body p-2">
+                                <iframe id="det-visor" title="Vista del PDF"></iframe>
+                                <p class="form-text mb-0 px-1">En algunos celulares el visor solo muestra la primera página; usa
+                                    <strong>Abrir</strong> para ver el documento completo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ===== Navegación inferior (móvil) ===== -->
+    <nav class="nav-inferior d-lg-none" aria-label="Navegación principal">
+        <a href="#inicio" data-ruta="inicio"><svg><use href="#i-inicio"/></svg>Inicio</a>
+        <a href="#documentos" data-ruta="documentos"><svg><use href="#i-documentos"/></svg>Documentos</a>
+        <a href="#nuevo" data-ruta="nuevo" class="nav-nuevo"><span><svg><use href="#i-mas"/></svg></span>Nuevo</a>
+        <a href="#buscar" data-ruta="buscar"><svg><use href="#i-buscar"/></svg>Buscar</a>
+    </nav>
+
+    <!-- ===== Confirmación (modal de Bootstrap, en lugar de confirm()) ===== -->
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal-titulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5" id="modal-titulo">¿Eliminar documento?</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0 text-body-secondary" id="modal-texto"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="modal-aceptar">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Avisos (toasts de Bootstrap) ===== -->
+    <div class="toast-container position-fixed p-3 avisos" id="avisos" aria-live="polite"></div>
+
+    <script src="js/vendor/jquery-3.7.1.min.js"></script>
+    <script src="js/vendor/bootstrap-5.3.3.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

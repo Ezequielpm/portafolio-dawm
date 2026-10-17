@@ -1,0 +1,8 @@
+
+# Credenciales locales de la base en la nube (no se suben)
+.env.local
+*.pem
+.vercel/
+zz-movil.html
+.vercel
+.env*

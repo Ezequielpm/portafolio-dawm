@@ -1,0 +1,2 @@
+# Archivos internos de PHP: solo se usan con include, nunca desde el navegador.
+Require all denied
