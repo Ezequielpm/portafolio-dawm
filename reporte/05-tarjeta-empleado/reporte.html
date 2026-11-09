@@ -325,9 +325,22 @@ figure.grande img { max-height: 112mm; width: 100%; }
     <div class="fecha">Tapachula, Chiapas · 8 de noviembre de 2026</div>
 </section>
 
-<!-- ================= EVIDENCIA ================= -->
+<!-- ================= CUERPO ================= -->
 <section>
-<h2>1. Enlaces de entrega</h2>
+<h2>1. Problemática y objetivo</h2>
+<p>En una institución, la credencial de cada trabajador lleva su nombre, su
+puesto y un identificador único. En México ese identificador suele ser el
+<strong>RFC</strong>, que se forma con letras del nombre, la fecha de
+nacimiento y una homoclave. Calcularlo a mano y luego diseñar la credencial es
+lento y fácil de equivocar: un artículo mal quitado del apellido o una letra
+equivocada producen un RFC distinto.</p>
+<p>El objetivo fue construir, con <strong>Vue 3 y PrimeVue</strong>, una
+interfaz que siga el mockup de la práctica: capturar los datos de una persona,
+<strong>calcular su RFC con homoclave</strong> y generar su <strong>tarjeta
+digital de empleado</strong> con código de barras y código QR, y publicarla en
+un dominio gratuito.</p>
+
+<h2>2. Enlaces de entrega</h2>
 <dl class="enlaces">
     <div>
         <dt>Aplicación publicada (dominio gratuito en Vercel)</dt>
@@ -343,58 +356,210 @@ figure.grande img { max-height: 112mm; width: 100%; }
     </div>
 </dl>
 
-<h2>2. Dashboard</h2>
-<figure class="grande">
-    <img src="img/dashboard.jpg" alt="Dashboard de la aplicación publicada">
-    <figcaption>Figura 1. Dashboard en https://tarjeta-empleado-unach.vercel.app/#/ con las tarjetas generadas y el menú de módulos.</figcaption>
-</figure>
+<h2>3. Tecnologías y arquitectura</h2>
+<table>
+    <tr><th style="width:24%">Pieza</th><th>Tecnología y función</th></tr>
+    <tr><td>Framework</td><td><strong>Vue 3.5</strong> con componentes de archivo único y <code>&lt;script setup&gt;</code>; el estado de los formularios usa <code>reactive</code> y <code>ref</code>.</td></tr>
+    <tr><td>Componentes de UI</td><td><strong>PrimeVue 4.5</strong> con el tema Aura (color primario índigo, como el mockup): InputText, DatePicker, SelectButton, Select, Button, Message, Toast, DataTable, Dialog, Tag, IconField y PrimeIcons.</td></tr>
+    <tr><td>Navegación</td><td><strong>Vue Router 4</strong> con historial por <em>hash</em> (<code>#/ruta</code>). Las vistas, salvo el Dashboard, se cargan bajo demanda.</td></tr>
+    <tr><td>Códigos</td><td><strong>JsBarcode</strong> (código de barras en SVG) y <strong>qrcode</strong> (código QR como imagen).</td></tr>
+    <tr><td>Herramientas</td><td><strong>Vite 8</strong> para el servidor de desarrollo y la compilación; publicación en <strong>Vercel</strong>.</td></tr>
+</table>
 
-<h2>3. Tarjeta digital del empleado</h2>
-<figure class="grande">
-    <img src="img/tarjeta.jpg" alt="Formulario y tarjeta digital">
-    <figcaption>Figura 2. https://tarjeta-empleado-unach.vercel.app/#/formEmpleados: al presionar GENERAR se calcula el RFC y se arma la tarjeta.</figcaption>
+<pre class="diagrama">src/
+├── main.js                      PrimeVue, tema Aura, idioma español y router
+├── router.js                    4 rutas: #/  #/formEmpleados  #/empleados  #/barcode-qr
+├── layout/AppLayout.vue         barra superior, botón ☰ y menú lateral
+├── components/TarjetaDigital.vue    la credencial: foto, nombre, puesto, RFC, QR y barras
+├── composables/useEmpleados.js  lista de tarjetas compartida entre vistas (localStorage)
+├── utils/rfc.js                 cálculo del RFC (sin dependencias de Vue)
+└── views/                       Dashboard, FormEmpleados, Empleados y BarcodeQr</pre>
+
+<p>La tarjeta es un componente que recibe al empleado como <em>prop</em>, así
+que la misma credencial aparece en el formulario y en el diálogo de la tabla.
+Las tarjetas generadas viven en el <em>composable</em>
+<code>useEmpleados</code>: el Dashboard, el formulario y la tabla leen la misma
+lista, que se guarda en <code>localStorage</code> para no perderla al recargar.
+Si se genera dos veces el mismo RFC, se actualiza el registro en lugar de
+duplicarlo. El historial por <em>hash</em> permite publicar el sitio en
+cualquier hosting estático sin configurar redirecciones.</p>
+<p>Se usó PrimeVue 4.5 porque tiene licencia MIT. PrimeVue 5 pasó a una
+licencia comercial (<em>PrimeUI License</em>) y, sin una clave registrada,
+muestra un aviso sobre la página.</p>
+</section>
+
+<section>
+<h2>4. Cálculo del RFC</h2>
+<p>El archivo <code>utils/rfc.js</code> sigue el instructivo del SAT para
+personas físicas. El RFC tiene 13 caracteres en cuatro partes; la tabla las
+muestra con el ejemplo de la tarjeta (Susana Rojas Merida, 22/08/1992):</p>
+<table>
+    <tr><th style="width:20%">Parte</th><th>Regla</th><th style="width:13%">Ejemplo</th></tr>
+    <tr><td>4 letras</td><td>Primera letra y primera vocal interna del apellido paterno, primera letra del materno y primera del nombre.</td><td><code>ROMS</code></td></tr>
+    <tr><td>Fecha</td><td>Fecha de nacimiento en formato AAMMDD.</td><td><code>920822</code></td></tr>
+    <tr><td>Homoclave</td><td>Cada carácter del nombre completo se cambia por dos dígitos (espacio = 00, A–I = 11–19, J–R = 21–29, S–Z = 32–39). Se suman los productos de cada par de dígitos consecutivos por el segundo dígito; los tres últimos dígitos de la suma se dividen entre 34, y el cociente y el residuo indican dos caracteres de la tabla del SAT.</td><td><code>JK</code></td></tr>
+    <tr><td>Verificador</td><td>Los 12 caracteres anteriores se multiplican por pesos del 13 al 2 y se suman; el dígito es 11 menos el residuo entre 11 (0 si el residuo es 0, A si resulta 10).</td><td><code>7</code></td></tr>
+</table>
+<p>Antes de tomar las letras se limpian los textos: mayúsculas, sin acentos y
+sin signos. El código también cubre las excepciones del instructivo:</p>
+<ul>
+    <li>Se quitan artículos y preposiciones de los apellidos y nombres (DE, LA, DEL, LOS, MC, VAN, Y…).</li>
+    <li>Si la persona tiene más de un nombre y el primero es JOSÉ o MARÍA, se usa el segundo.</li>
+    <li>Con un solo apellido se toman dos letras del apellido y dos del nombre; si el paterno tiene una o dos letras, se usa su primera letra, la del materno y dos del nombre.</li>
+    <li>Si las cuatro letras forman una palabra altisonante de la lista del SAT, la última se cambia por X.</li>
+</ul>
+<p>El resultado se comprobó con el ejemplo oficial del instructivo: Emma Gómez
+Díaz, nacida el 31/12/1956, tiene el RFC <code>GODE561231GR8</code>, y el
+programa produce exactamente ese valor.</p>
+
+<h2>5. Funcionalidades</h2>
+
+<h3>5.1 Dashboard</h3>
+<p>Es la vista de inicio. Muestra cuántas tarjetas se han generado, cuántas
+son de empleadas y cuántas de empleados, y las cinco más recientes con su RFC.
+El panel de bienvenida explica el flujo y lleva al formulario con
+<strong>Generar una tarjeta</strong>.</p>
+<figure>
+    <img src="img/dashboard.jpg" alt="Dashboard de la aplicación publicada">
+    <figcaption>Figura 1. Dashboard en la versión publicada, con seis tarjetas generadas.</figcaption>
 </figure>
 </section>
 
 <section>
-<h2>4. Descripción</h2>
-<p>La interfaz reproduce el mockup: barra superior con el menú ☰, menú lateral
-de módulos y, en la vista <strong>Tarjeta de empleado</strong>, el formulario
-<em>Generar el RFC de una persona</em> junto a la <em>Tarjeta digital</em>. Se
-hizo con <strong>Vue 3</strong> (componentes <code>&lt;script setup&gt;</code>
-y Vue Router) y componentes de <strong>PrimeVue</strong>: InputText,
-DatePicker, SelectButton, Button, Message, Toast, DataTable, Dialog y Tag.</p>
+<h3>5.2 Tarjeta de empleado</h3>
+<p>Es la vista del mockup: el formulario <em>Generar el RFC de una persona</em>
+a la izquierda y la <em>Tarjeta digital</em> a la derecha. El formulario pide
+nombre(s), apellidos, fecha de nacimiento (DatePicker en español, sin fechas
+futuras), sexo y una fotografía opcional. Al presionar
+<strong>GENERAR</strong> se valida, se calcula el RFC y se arma la tarjeta con
+la foto o una silueta, el nombre, el puesto (Empleada o Empleado según el
+sexo), el RFC como ID, el código QR y el código de barras. Un <em>toast</em>
+confirma la operación.</p>
+<p>La fotografía se recorta en cuadrado y se reduce a 300 px con un
+<code>&lt;canvas&gt;</code>, para que quepa en <code>localStorage</code>. Si
+falta un dato o lleva números, el campo se marca en rojo con un mensaje de
+PrimeVue (figura 3) y no se genera la tarjeta.</p>
+<div class="dos">
+    <figure>
+        <img src="img/tarjeta.jpg" alt="Formulario y tarjeta digital">
+        <figcaption>Figura 2. Tarjeta generada para Susana Rojas Merida.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/validacion.jpg" alt="Formulario con errores de validación">
+        <figcaption>Figura 3. Campos vacíos y un número en el apellido materno.</figcaption>
+    </figure>
+</div>
+</section>
 
-<table>
-    <tr><th style="width:27%">Vista</th><th>Contenido</th></tr>
-    <tr><td>Dashboard</td><td>Indicadores (tarjetas generadas, empleadas, empleados) y últimas tarjetas.</td></tr>
-    <tr><td>Tarjeta de empleado</td><td>Formulario con validación y tarjeta con foto opcional, nombre, puesto, RFC, código QR y código de barras.</td></tr>
-    <tr><td>Empleados</td><td>Tabla con búsqueda y paginación; cada fila abre su tarjeta en un diálogo.</td></tr>
-    <tr><td>BarCode-QR</td><td>Generador libre de QR y código de barras con descarga en PNG/SVG.</td></tr>
+<section>
+<h3>5.3 Empleados</h3>
+<p>Una DataTable reúne todas las tarjetas generadas, con ordenamiento por
+columna, búsqueda por nombre o RFC y paginación de ocho filas. El puesto se
+muestra como etiqueta de color. El botón de credencial abre la tarjeta en un
+diálogo, y el de basura la elimina de la lista.</p>
+<div class="dos">
+    <figure>
+        <img src="img/empleados.jpg" alt="Tabla de empleados">
+        <figcaption>Figura 4. Tabla de empleados con búsqueda y orden.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/empleados-dialogo.jpg" alt="Tarjeta en un diálogo">
+        <figcaption>Figura 5. Tarjeta abierta en un diálogo.</figcaption>
+    </figure>
+</div>
+
+<h3>5.4 BarCode-QR</h3>
+<p>Un generador libre: lo que se escribe en el campo se convierte al instante
+en un código QR y en un código de barras del formato elegido (CODE128, CODE39,
+EAN13, UPC o ITF14). El QR se descarga en PNG y el código de barras en SVG.
+Si el texto no es válido para el formato (por ejemplo, letras en EAN13), se
+avisa en lugar de dibujar un código incorrecto.</p>
+<figure class="media">
+    <img src="img/barcode-qr.jpg" alt="Generador de códigos">
+    <figcaption>Figura 6. Generador con el RFC de la figura 2 en CODE128.</figcaption>
+</figure>
+
+<h3>5.5 Diseño responsivo</h3>
+<p>Por debajo de 992 px el menú lateral se oculta y se abre con el botón ☰
+como menú deslizable sobre un velo. Por debajo de 1200 px el formulario y la
+tarjeta se apilan, y por debajo de 520 px los indicadores quedan en una sola
+columna. Las figuras 7 a 10 son de la versión publicada a 390 px de ancho.</p>
+<div class="cuatro">
+    <figure>
+        <img src="img/movil-dashboard.jpg" alt="Dashboard en celular">
+        <figcaption>Figura 7. Dashboard.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/movil-menu.jpg" alt="Menú deslizable">
+        <figcaption>Figura 8. Menú abierto con ☰.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/movil-form.jpg" alt="Formulario en celular">
+        <figcaption>Figura 9. Formulario.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/movil-tarjeta.jpg" alt="Tarjeta en celular">
+        <figcaption>Figura 10. Tarjeta generada.</figcaption>
+    </figure>
+</div>
+</section>
+
+<section>
+<h2>6. Códigos de barras y QR</h2>
+<p>El <strong>código de barras</strong> lleva el RFC en formato CODE128, que
+admite letras y números y es el más compacto para un texto de 13 caracteres.
+JsBarcode lo dibuja dentro de un <code>&lt;svg&gt;</code>, así que se ve nítido
+a cualquier tamaño.</p>
+<p>El <strong>código QR</strong> no guarda solo el RFC: guarda una
+<strong>vCard</strong> (tarjeta de contacto), con corrección de errores nivel
+M. Al escanearlo con la cámara del celular, el teléfono reconoce el formato y
+ofrece agregar el contacto. Para la tarjeta de la figura 2 contiene:</p>
+<pre class="diagrama">BEGIN:VCARD
+VERSION:3.0
+N:Rojas Merida;Susana;;;
+FN:Susana Rojas Merida
+ORG:UNACH - Campus IV Tapachula
+TITLE:Empleada
+NOTE:RFC ROMS920822JK7
+END:VCARD</pre>
+
+<h2>7. Pruebas</h2>
+<p>El cálculo del RFC se probó con Node directamente sobre
+<code>utils/rfc.js</code>; el resto, sobre la versión publicada en Vercel, a
+1440 px y a 390 px de ancho:</p>
+<table class="pruebas">
+    <thead><tr><th style="width:52%">Prueba</th><th>Resultado</th></tr></thead>
+    <tr><td>Emma Gómez Díaz, 31/12/1956 (ejemplo del SAT)</td><td><code>GODE561231GR8</code>, igual al oficial</td></tr>
+    <tr><td>Susana Rojas Merida, 22/08/1992</td><td><code>ROMS920822JK7</code></td></tr>
+    <tr><td>José Antonio Camargo Hernández</td><td><code>CAHA920822UL8</code>: se omite JOSÉ</td></tr>
+    <tr><td>María Fernanda López Ruiz / María López Ruiz</td><td><code>LORF…</code> / <code>LORM…</code>: MARÍA solo se omite si hay otro nombre</td></tr>
+    <tr><td>Juan de la Cruz López</td><td><code>CULJ900115782</code>: se quitan DE y LA</td></tr>
+    <tr><td>Ana Ruiz (sin apellido materno)</td><td><code>RUAN850310MX8</code>: dos letras del apellido y dos del nombre</td></tr>
+    <tr><td>Óscar Puente Tovar (formaría una palabra altisonante)</td><td><code>PUTX8805123U9</code>: la cuarta letra cambia a X</td></tr>
+    <tr><td>Lucía Pérez Domínguez, 29/02/2000</td><td><code>PEDL0002298P8</code>: acentos y año bisiesto correctos</td></tr>
+    <tr><td>Nombre y paterno vacíos, número en el materno</td><td>Tres mensajes en sus campos y aviso «Revisa el formulario»</td></tr>
+    <tr><td>Generar dos veces la misma persona</td><td>Se actualiza la tarjeta; el total sigue en 6</td></tr>
+    <tr><td>Recargar la página</td><td>Dashboard y tabla conservan las tarjetas</td></tr>
+    <tr><td>Las cuatro vistas a 390 px</td><td>Sin desbordamiento horizontal</td></tr>
 </table>
+<p>Las pruebas en celular encontraron dos fallas que se corrigieron antes de
+la entrega: a 390 px los paneles del Dashboard se salían 17 px de la pantalla
+(la columna de la rejilla crecía con el nombre más largo) y las iniciales de
+«Juan de la Cruz» aparecían como «Jd».</p>
 
-<h3>Cálculo del RFC</h3>
-<p>El RFC (13 caracteres) se calcula con el algoritmo del SAT para personas
-físicas: cuatro letras del nombre (quitando artículos como DE o LA, omitiendo
-JOSÉ/MARÍA cuando hay más de un nombre y sustituyendo palabras altisonantes),
-la fecha AAMMDD, la homoclave de dos caracteres y el dígito verificador por
-módulo 11. Se comprobó con el ejemplo del instructivo del SAT
-(Emma Gómez Díaz, 31/12/1956 → <code>GODE561231GR8</code>).</p>
-
-<h3>Códigos</h3>
-<p>El código de barras CODE128 del RFC se dibuja con <code>JsBarcode</code> y
-el código QR con la librería <code>qrcode</code>. El QR contiene una vCard,
-así que al escanearlo con el celular se ofrece guardar el contacto con el
-nombre, el puesto, la institución y el RFC del empleado.</p>
-
-<h2>5. Conclusión</h2>
-<p>Vue permitió separar la interfaz en componentes reutilizables: la misma
-tarjeta se usa en el formulario y en el diálogo de la tabla, y la lista de
-empleados se comparte entre vistas mediante un <em>composable</em>. PrimeVue
-aportó componentes listos y consistentes (selector de fecha, mensajes de
-validación, tabla con filtros), lo que dejó el esfuerzo en la lógica del RFC y
-en el diseño de la tarjeta. La aplicación quedó publicada en Vercel y su código
-en GitHub.</p>
+<h2>8. Conclusiones</h2>
+<p>La aplicación cumple lo que pide la práctica: reproduce el mockup, calcula
+el RFC con homoclave y dígito verificador según el SAT, y genera la tarjeta
+digital con código de barras y un QR que el celular puede guardar como
+contacto. Además agrega un Dashboard, la tabla de empleados y un generador
+libre de códigos.</p>
+<p>Vue permitió dividir la interfaz en piezas reutilizables: la misma tarjeta
+sirve en el formulario y en el diálogo, y un <em>composable</em> comparte la
+lista entre vistas sin una librería de estado. PrimeVue aportó componentes
+listos (selector de fecha, mensajes de validación, tabla con filtros), lo que
+dejó el esfuerzo en la lógica del RFC, que es la parte más delicada. Separar
+esa lógica en un archivo sin Vue facilitó probarla por su cuenta contra el
+ejemplo oficial del SAT.</p>
 </section>
 
 </body>
