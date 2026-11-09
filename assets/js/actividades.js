@@ -50,7 +50,7 @@ const ACTIVIDADES = [
         resumen: "Panel en Vue 3 + PrimeVue que calcula el RFC con homoclave " +
                  "siguiendo el algoritmo del SAT y genera la credencial del " +
                  "empleado con código de barras y un QR con su vCard.",
-        ruta: "actividades/05-vue-primevue/README.md",
+        ruta: "https://tarjeta-empleado-unach.vercel.app",
         fecha: "Noviembre 2026",
         estado: "Entregada",
         icono: "🪪",

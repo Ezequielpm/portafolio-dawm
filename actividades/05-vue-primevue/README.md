@@ -8,7 +8,7 @@ Interfaz hecha con **Vue 3 + PrimeVue** que captura los datos de una persona,
 calcula su RFC y genera su tarjeta digital de empleado con código de barras y
 código QR.
 
-- **Aplicación publicada:** _pendiente_
+- **Aplicación publicada:** <https://tarjeta-empleado-unach.vercel.app>
 - **Código fuente:** <https://github.com/Ezequielpm/portafolio-dawm/tree/main/actividades/05-vue-primevue>
 
 ## Vistas
