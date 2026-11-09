@@ -30,11 +30,17 @@ portafolio-dawm/
 │   │   ├── index.html
 │   │   ├── css/estilos.css
 │   │   └── js/app.js
-│   └── 02-cursos-monedas/
-│       ├── index.html
+│   ├── 02-cursos-monedas/
+│   │   ├── index.html
+│   │   ├── css/estilos.css
+│   │   ├── js/cursos.js
+│   │   └── js/app.js
+│   └── 03-tabla-multiplicar/
+│       ├── index.php
+│       ├── ficha.html
 │       ├── css/estilos.css
-│       ├── js/cursos.js
-│       └── js/app.js
+│       ├── js/ficha.js
+│       └── img/
 ├── reporte/
 └── README.md
 ```
@@ -100,6 +106,50 @@ programarlo aparte.
 El reporte de esta práctica está en `reporte/`, junto con el HTML que lo
 genera.
 
+## Práctica 03 — Tabla de multiplicar con PHP
+
+Primera práctica del lado del servidor. Un script en PHP recibe un número por
+la URL y devuelve su tabla de multiplicar ya armada:
+
+```
+http://localhost/tabla/index.php?num=2
+```
+
+`$_GET` es el arreglo superglobal donde PHP deja los parámetros de la cadena de
+consulta, con el nombre del parámetro como llave:
+
+```php
+$numeroCrudo = isset($_GET['num']) ? trim($_GET['num']) : '';
+$numero = filter_var($numeroCrudo, FILTER_VALIDATE_INT);
+```
+
+`isset()` evita el aviso *Undefined array key* cuando la página se abre sin
+parámetros, y `filter_var()` comprueba que el texto que llegó por la URL sea un
+entero antes de usarlo en la multiplicación. Todo lo que se imprime pasa por
+`htmlspecialchars()`, porque el contenido de la URL lo escribe quien sea desde
+la barra de direcciones. El parámetro opcional `hasta` cambia cuántas filas se
+generan (1 a 20, por omisión 10).
+
+Esta práctica corre sobre Apache, así que **no funciona en GitHub Pages**, que
+solo sirve archivos estáticos. Por eso la carpeta incluye además `ficha.html`,
+que reproduce la misma tabla con JavaScript —leyendo la URL con
+`URLSearchParams`, el equivalente de `$_GET` en el navegador— y muestra el
+código PHP original. La tarjeta del portafolio apunta a esa ficha; el
+entregable real es `index.php`.
+
+### Cómo correrla en XAMPP
+
+1. Iniciar **Apache** desde el panel de XAMPP.
+2. Copiar `actividades/03-tabla-multiplicar/` a `htdocs` con el nombre `tabla`;
+   el script `sincronizar-xampp.sh` de esa carpeta lo hace.
+3. Abrir <http://localhost/tabla/index.php?num=2>.
+
+Tiene que ser una copia y no un enlace simbólico: Apache corre como el usuario
+`daemon`, que no puede entrar a `~/Documents`, y el enlace acaba en un
+**Error 403**.
+
+Detalles y tabla de parámetros en el `README.md` de la propia carpeta.
+
 ## Ejecución local
 
 ```bash
@@ -109,8 +159,19 @@ python3 -m http.server 8000
 Y abrir <http://localhost:8000>. Hace falta un servidor porque las peticiones
 a la API no funcionan bien abriendo el archivo directamente con `file://`.
 
+Esto alcanza para las prácticas 01 y 02 y para la ficha de la 03. El
+`index.php` de la práctica 03 necesita Apache con PHP; para eso se usa XAMPP,
+como se explica arriba.
+
 ## Publicación
 
 Todas las rutas son relativas, así que el sitio funciona subiendo la carpeta
 tal cual a cualquier hosting estático. Está publicado en GitHub Pages desde
 la rama `main`.
+
+El único archivo que un hosting estático no puede ejecutar es
+`actividades/03-tabla-multiplicar/index.php`; se sube igual, porque es el
+entregable de esa práctica, y quien la revise en línea ve la ficha
+equivalente. Si más adelante el portafolio se mueve a un hosting con PHP,
+basta con cambiar la `ruta` de la actividad 3 en `assets/js/actividades.js`
+de `ficha.html` a `index.php`.

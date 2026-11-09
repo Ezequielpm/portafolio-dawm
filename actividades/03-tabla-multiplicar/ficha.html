@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 3 — Tabla de multiplicar con PHP | UNACH</title>
+    <meta name="description" content="Script en PHP que genera la tabla de multiplicar de un número recibido por la URL con $_GET.">
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+    <div class="envoltorio">
+
+        <a class="volver" href="../../index.html">&larr; Volver al portafolio</a>
+
+        <header class="cabecera">
+            <div class="marca">
+                <img src="img/logo-unach.png" alt="Logotipo UNACH">
+                <div>
+                    <span class="marca-nombre">Tabla<strong>PHP</strong></span>
+                    <span class="marca-lema">Universidad Autónoma de Chiapas</span>
+                </div>
+            </div>
+            <span class="insignia">Actividad 03</span>
+        </header>
+
+        <section class="hero">
+            <h1>Tabla de multiplicar con PHP</h1>
+            <p>El entregable de esta práctica es <code>index.php</code>, que se
+               ejecuta en el servidor Apache de XAMPP. Como GitHub Pages solo
+               sirve archivos estáticos y no interpreta PHP, esta ficha reproduce
+               el mismo resultado con JavaScript y muestra el código original.</p>
+        </section>
+
+        <p class="aviso aviso-neutro">
+            <strong>Para ver la versión real:</strong> copia la carpeta a
+            <code>htdocs</code>, inicia Apache desde el panel de XAMPP y abre
+            <code>http://localhost/tabla/index.php?num=2</code>.
+        </p>
+
+        <!-- Demostración equivalente, resuelta en el navegador -->
+        <form class="panel-consulta" id="formulario" method="get" action="ficha.html">
+            <div class="campo">
+                <label for="num">Número</label>
+                <input type="number" id="num" name="num" min="-1000" max="1000"
+                       step="1" placeholder="2" required>
+            </div>
+
+            <div class="campo">
+                <label for="hasta">Hasta el</label>
+                <input type="number" id="hasta" name="hasta" min="1" max="20"
+                       step="1" value="10">
+            </div>
+
+            <button type="submit">Generar tabla</button>
+        </form>
+
+        <div id="salida"></div>
+
+        <section class="explicacion">
+            <h2>Cómo llega el número al script</h2>
+            <p>
+                Todo lo que sigue al signo <code>?</code> en la dirección es la
+                <em>cadena de consulta</em>. Cada parámetro es un par
+                <code>nombre=valor</code> y PHP los deja listos en la superglobal
+                <code>$_GET</code>, usando el nombre como llave:
+            </p>
+
+<pre class="codigo"><code>http://localhost/tabla/index.php?num=2&amp;hasta=10
+                                    │        │
+                                    │        └── $_GET['hasta']
+                                    └── $_GET['num']</code></pre>
+
+            <h3>Lectura y validación</h3>
+            <p>
+                Los valores de la URL siempre llegan como texto y los escribe
+                quien sea desde la barra de direcciones, así que se comprueban
+                antes de usarlos:
+            </p>
+
+<pre class="codigo"><code>&lt;?php
+// isset() evita el aviso «Undefined array key» si no viene el parámetro
+$numeroCrudo = isset($_GET['num']) ? trim($_GET['num']) : '';
+
+if ($numeroCrudo !== '') {
+    $numeroValidado = filter_var($numeroCrudo, FILTER_VALIDATE_INT);
+
+    if ($numeroValidado === false) {
+        $error = 'El valor «' . $numeroCrudo . '» no es un número entero.';
+    } elseif ($numeroValidado &lt; NUM_MINIMO || $numeroValidado &gt; NUM_MAXIMO) {
+        $error = 'El número debe estar entre ' . NUM_MINIMO . ' y ' . NUM_MAXIMO . '.';
+    } else {
+        $numero = $numeroValidado;
+    }
+}</code></pre>
+
+            <h3>Generación de las filas</h3>
+            <p>
+                El ciclo arma un arreglo y la plantilla HTML solo lo recorre, de
+                modo que el cálculo no queda mezclado con las etiquetas:
+            </p>
+
+<pre class="codigo"><code>$filas = [];
+for ($i = 1; $i &lt;= $hasta; $i++) {
+    $filas[] = [
+        'multiplicador' =&gt; $i,
+        'resultado'     =&gt; $numero * $i,
+    ];
+}</code></pre>
+
+<pre class="codigo"><code>&lt;?php foreach ($filas as $fila): ?&gt;
+    &lt;tr&gt;
+        &lt;td&gt;&lt;?= esc($numero) ?&gt; &amp;times; &lt;?= esc($fila['multiplicador']) ?&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;?= esc($fila['resultado']) ?&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;?php endforeach; ?&gt;</code></pre>
+
+            <h3>Detalles que se cuidaron</h3>
+            <ul>
+                <li>Cada dato que se imprime pasa por <code>htmlspecialchars()</code>,
+                    para que un valor con etiquetas en la URL no se inyecte en la
+                    página.</li>
+                <li>El formulario usa <code>method="get"</code>: al enviarlo, el
+                    propio navegador construye la URL con
+                    <code>?num=...&amp;hasta=...</code>, que es justo la forma en que
+                    el profesor pidió recibir el parámetro.</li>
+                <li>Sin parámetro la página no truena: muestra el formulario y una
+                    indicación de cómo escribir la dirección.</li>
+                <li><code>hasta</code> es opcional; si no viene o viene mal, se usa
+                    10 sin marcar error.</li>
+            </ul>
+        </section>
+
+        <footer class="pie">
+            <p><strong>Universidad Autónoma de Chiapas</strong> · Desarrollo de Aplicaciones Web y Móviles</p>
+            <p>Ezequiel Peña Mazariegos · Actividad 03</p>
+        </footer>
+
+    </div>
+
+    <script src="js/ficha.js"></script>
+</body>
+</html>

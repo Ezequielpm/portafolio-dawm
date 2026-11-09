@@ -1,0 +1,404 @@
+/* ===== Identidad visual (misma paleta del portafolio UNACH) ===== */
+:root {
+    --azul-unach: #123a5e;
+    --azul-oscuro: #0d2b46;
+    --azul-claro: #1e5c92;
+    --dorado: #c9a227;
+    --dorado-oscuro: #a8871d;
+    --fondo: #eef1f5;
+    --tarjeta: #ffffff;
+    --texto: #2b3440;
+    --texto-suave: #66707d;
+    --borde: #dfe4ea;
+    --exito: #1c7c54;
+    --error: #b3261e;
+    --sombra: 0 2px 10px rgba(18, 58, 94, 0.08);
+    --sombra-alta: 0 8px 24px rgba(18, 58, 94, 0.14);
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+}
+
+.envoltorio {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* ===== Enlace de regreso ===== */
+.volver {
+    display: inline-block;
+    margin-bottom: 16px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azul-unach);
+    background-color: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    text-decoration: none;
+    box-shadow: var(--sombra);
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.volver:hover {
+    background-color: var(--azul-unach);
+    color: #fff;
+}
+
+/* ===== Cabecera ===== */
+.cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 18px 24px;
+    background-color: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-top: 4px solid var(--azul-unach);
+    border-radius: 10px;
+    box-shadow: var(--sombra);
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.marca img {
+    width: 52px;
+    height: auto;
+}
+
+.marca-nombre {
+    display: block;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 21px;
+    color: var(--azul-unach);
+    letter-spacing: -0.2px;
+}
+
+.marca-lema {
+    display: block;
+    font-size: 12px;
+    color: var(--texto-suave);
+}
+
+.insignia {
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--azul-unach);
+    background-color: #e8eef5;
+    border: 1px solid var(--borde);
+    border-radius: 999px;
+}
+
+/* ===== Presentación ===== */
+.hero {
+    margin-top: 20px;
+    padding: 26px 28px;
+    background: linear-gradient(135deg, var(--azul-unach), var(--azul-claro));
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: var(--sombra);
+}
+
+.hero h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.hero h1:last-child {
+    margin-bottom: 0;   /* en index.php el título va solo, sin párrafo debajo */
+}
+
+.hero p {
+    max-width: 640px;
+    font-size: 15px;
+    color: #dbe6f1;
+}
+
+.hero code,
+.aviso code {
+    padding: 1px 6px;
+    font-family: var(--mono);
+    font-size: 0.9em;
+    background-color: rgba(255, 255, 255, 0.16);
+    border-radius: 4px;
+}
+
+.aviso code {
+    background-color: #e8eef5;
+    color: var(--azul-oscuro);
+}
+
+/* ===== Formulario de consulta ===== */
+.panel-consulta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+    margin-top: 20px;
+    padding: 20px 24px;
+    background-color: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-left: 4px solid var(--dorado);
+    border-radius: 10px;
+    box-shadow: var(--sombra);
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--texto-suave);
+}
+
+.campo input {
+    width: 150px;
+    padding: 9px 12px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--texto);
+    background-color: #fff;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+}
+
+.campo input:focus {
+    outline: 2px solid var(--azul-claro);
+    outline-offset: 1px;
+}
+
+.panel-consulta button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    color: #fff;
+    background-color: var(--azul-unach);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.panel-consulta button:hover {
+    background-color: var(--azul-oscuro);
+}
+
+/* ===== Avisos ===== */
+.aviso {
+    margin-top: 20px;
+    padding: 14px 18px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--borde);
+    background-color: var(--tarjeta);
+    box-shadow: var(--sombra);
+}
+
+.aviso-error {
+    color: var(--error);
+    border-left: 4px solid var(--error);
+}
+
+.aviso-neutro {
+    color: var(--texto-suave);
+    border-left: 4px solid var(--azul-claro);
+}
+
+/* ===== Resultado ===== */
+.resultado {
+    margin-top: 20px;
+    padding: 22px 24px;
+    background-color: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    box-shadow: var(--sombra-alta);
+}
+
+.resultado-encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--borde);
+}
+
+.resultado-encabezado h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--azul-unach);
+}
+
+.resultado-url {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--texto-suave);
+    word-break: break-all;
+}
+
+/* ===== Tabla ===== */
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.tabla caption {
+    margin-bottom: 12px;
+    font-size: 12.5px;
+    color: var(--texto-suave);
+    text-align: left;
+}
+
+.tabla th {
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+    color: #fff;
+    background-color: var(--azul-unach);
+}
+
+.tabla th:last-child,
+.tabla td:last-child {
+    text-align: right;
+}
+
+.tabla td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--borde);
+    font-family: var(--mono);
+}
+
+.tabla tbody tr:nth-child(even) {
+    background-color: #f6f8fa;
+}
+
+.tabla tbody tr:hover {
+    background-color: #e8eef5;
+}
+
+.celda-resultado {
+    font-weight: 700;
+    color: var(--azul-unach);
+}
+
+/* ===== Bloques de código (ficha del portafolio) ===== */
+.explicacion {
+    margin-top: 20px;
+    padding: 22px 24px;
+    background-color: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    box-shadow: var(--sombra);
+}
+
+.explicacion h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 20px;
+    color: var(--azul-unach);
+    margin-bottom: 10px;
+}
+
+.explicacion h3 {
+    font-size: 15px;
+    color: var(--azul-oscuro);
+    margin: 18px 0 6px;
+}
+
+.explicacion p,
+.explicacion li {
+    font-size: 14.5px;
+    color: var(--texto);
+}
+
+.explicacion ol,
+.explicacion ul {
+    margin: 8px 0 0 20px;
+}
+
+.explicacion li {
+    margin-bottom: 5px;
+}
+
+.explicacion code {
+    padding: 1px 5px;
+    font-family: var(--mono);
+    font-size: 0.9em;
+    background-color: #e8eef5;
+    border-radius: 4px;
+}
+
+pre.codigo {
+    margin-top: 10px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    color: #e6edf3;
+    background-color: var(--azul-oscuro);
+    border-radius: 8px;
+}
+
+pre.codigo code {
+    padding: 0;
+    background: none;
+    font-size: inherit;
+}
+
+/* ===== Pie ===== */
+.pie {
+    margin-top: 28px;
+    padding: 18px 4px;
+    font-size: 13px;
+    text-align: center;
+    color: var(--texto-suave);
+    border-top: 1px solid var(--borde);
+}
+
+.pie p + p {
+    margin-top: 4px;
+}
+
+/* ===== Adaptación a pantallas chicas ===== */
+@media (max-width: 620px) {
+    .envoltorio { padding: 16px; }
+    .hero { padding: 20px; }
+    .hero h1 { font-size: 24px; }
+    .panel-consulta { flex-direction: column; align-items: stretch; }
+    .campo input { width: 100%; }
+    .panel-consulta button { width: 100%; }
+}

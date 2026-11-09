@@ -31,5 +31,17 @@ const ACTIVIDADES = [
         estado: "Entregada",
         icono: "💱",
         temas: ["SPA", "CSS Grid responsivo", "API REST", "Hover CSS", "Intl.NumberFormat"]
+    },
+    {
+        numero: 3,
+        titulo: "Tabla de multiplicar con PHP",
+        resumen: "Script en PHP que corre sobre Apache (XAMPP) y arma en el " +
+                 "servidor la tabla de multiplicar del número que recibe por " +
+                 "la URL con $_GET, validando el parámetro antes de usarlo.",
+        ruta: "actividades/03-tabla-multiplicar/ficha.html",
+        fecha: "Septiembre 2026",
+        estado: "Entregada",
+        icono: "✖️",
+        temas: ["PHP 8", "XAMPP", "$_GET", "Parámetros de URL", "Validación"]
     }
 ];
