@@ -45,6 +45,18 @@ const ACTIVIDADES = [
         temas: ["PHP 8", "XAMPP", "$_GET", "Parámetros de URL", "Validación"]
     },
     {
+        numero: 4,
+        titulo: "Sistema de gestión de documentos",
+        resumen: "Plataforma responsiva para registrar, digitalizar y buscar " +
+                 "los oficios y circulares de una oficina, con seguimiento " +
+                 "de estatus y consulta del PDF de cada documento.",
+        ruta: "https://gestion-documentos-unach-six.vercel.app",
+        fecha: "Octubre 2026",
+        estado: "Entregada",
+        icono: "🗂️",
+        temas: ["PHP", "MySQL", "Bootstrap 5", "jQuery", "Subida de PDF"]
+    },
+    {
         numero: 5,
         titulo: "Tarjeta digital de empleado con QR",
         resumen: "Panel en Vue 3 + PrimeVue que calcula el RFC con homoclave " +
