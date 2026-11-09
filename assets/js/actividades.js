@@ -43,5 +43,17 @@ const ACTIVIDADES = [
         estado: "Entregada",
         icono: "✖️",
         temas: ["PHP 8", "XAMPP", "$_GET", "Parámetros de URL", "Validación"]
+    },
+    {
+        numero: 5,
+        titulo: "Tarjeta digital de empleado con QR",
+        resumen: "Panel en Vue 3 + PrimeVue que calcula el RFC con homoclave " +
+                 "siguiendo el algoritmo del SAT y genera la credencial del " +
+                 "empleado con código de barras y un QR con su vCard.",
+        ruta: "actividades/05-vue-primevue/README.md",
+        fecha: "Noviembre 2026",
+        estado: "Entregada",
+        icono: "🪪",
+        temas: ["Vue 3", "PrimeVue", "Vue Router", "Código QR", "Código de barras"]
     }
 ];

@@ -1,0 +1,41 @@
+:root {
+    --fondo: #f1f4f9;
+    --texto: #334155;
+    --suave: #64748b;
+    --primario: #4f46e5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Lato', system-ui, sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Tarjeta blanca que usan todas las vistas */
+.panel {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .02), 0 1px 4px rgba(0, 0, 0, .06);
+}
+
+.titulo {
+    margin: 0 0 22px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    color: var(--texto);
+}
+
+@media (max-width: 520px) {
+    .panel {
+        padding: 20px 16px;
+    }
+}
