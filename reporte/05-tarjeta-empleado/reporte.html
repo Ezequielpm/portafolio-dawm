@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte — Tarjeta digital de un Empleado con QR</title>
+<style>
+@page { size: Letter; margin: 18mm 16mm; }
+
+:root {
+    --azul: #123a5e;
+    --azul-claro: #1e5c92;
+    --dorado: #c9a227;
+    --texto: #2b3440;
+    --suave: #5c6672;
+    --borde: #d8dee6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--texto);
+    font-size: 11pt;
+    line-height: 1.55;
+}
+
+.salto { page-break-after: always; }
+
+/* ===== Portada ===== */
+.portada {
+    height: 232mm;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.encabezado-portada {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6mm;
+    text-align: left;
+    padding-bottom: 5mm;
+    border-bottom: 1.6pt solid var(--dorado);
+}
+
+.encabezado-portada img.escudo { width: 20mm; flex-shrink: 0; }
+
+.portada .universidad {
+    font-family: Georgia, serif;
+    font-size: 15pt;
+    color: var(--azul);
+    line-height: 1.25;
+}
+
+.portada .escuela {
+    font-size: 10pt;
+    color: var(--suave);
+    margin-top: 1mm;
+}
+
+.bloque-titulo { padding: 12mm 0 9mm; }
+
+.portada .materia {
+    font-size: 10.5pt;
+    font-weight: 600;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    color: var(--dorado);
+}
+
+.portada .practica {
+    font-size: 10.5pt;
+    font-weight: 600;
+    letter-spacing: 0.6pt;
+    text-transform: uppercase;
+    color: var(--suave);
+    margin-top: 6mm;
+}
+
+.portada .titulo {
+    font-family: Georgia, serif;
+    font-size: 24pt;
+    line-height: 1.22;
+    color: var(--azul);
+    margin: 2.5mm auto 0;
+    max-width: 142mm;
+}
+
+.vitrina {
+    padding: 0 4mm;
+    margin-bottom: auto;
+}
+
+.vitrina img {
+    width: 100%;
+    border: 0.5pt solid var(--borde);
+    border-radius: 4pt;
+}
+
+.vitrina figcaption {
+    font-size: 8.5pt;
+    color: var(--suave);
+    font-style: italic;
+    margin-top: 2.5mm;
+}
+
+.datos {
+    width: 100%;
+    text-align: left;
+    border-top: 1pt solid var(--borde);
+    padding-top: 5mm;
+    margin-top: 8mm;
+}
+
+.datos div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 2mm 0;
+    border-bottom: 0.5pt dotted var(--borde);
+    font-size: 10.5pt;
+}
+
+.datos dt {
+    font-weight: 600;
+    color: var(--suave);
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.4pt;
+}
+
+.datos dd { text-align: right; font-weight: 600; }
+
+.fecha {
+    margin-top: 5mm;
+    font-size: 10pt;
+    color: var(--suave);
+    text-align: center;
+}
+
+/* ===== Cuerpo ===== */
+h2 {
+    font-family: Georgia, serif;
+    font-size: 15pt;
+    color: var(--azul);
+    margin: 9mm 0 2mm;
+    padding-bottom: 1.6mm;
+    border-bottom: 1.6pt solid var(--dorado);
+}
+
+h2:first-of-type { margin-top: 0; }
+
+h3 {
+    font-size: 11.5pt;
+    color: var(--azul);
+    margin: 6mm 0 1.5mm;
+}
+
+p { margin-bottom: 2.6mm; text-align: justify; }
+
+ul, ol { margin: 0 0 3mm 6mm; }
+li { margin-bottom: 1.2mm; }
+
+code {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 9pt;
+    background: #f1f4f8;
+    border: 0.5pt solid var(--borde);
+    border-radius: 2pt;
+    padding: 0.4pt 2pt;
+}
+
+pre {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 8.5pt;
+    line-height: 1.45;
+    background: #f7f9fb;
+    border: 0.5pt solid var(--borde);
+    border-left: 2.4pt solid var(--azul-claro);
+    border-radius: 3pt;
+    padding: 3mm 4mm;
+    margin-bottom: 3mm;
+    white-space: pre-wrap;
+    page-break-inside: avoid;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin-bottom: 3mm;
+    page-break-inside: avoid;
+}
+
+th, td {
+    border: 0.5pt solid var(--borde);
+    padding: 2mm 2.6mm;
+    text-align: left;
+    vertical-align: top;
+}
+
+th { background: #eef2f6; color: var(--azul); font-size: 9.5pt; }
+
+td code { font-size: 8pt; }
+
+figure { margin: 3mm 0 5mm; page-break-inside: avoid; }
+
+figure img {
+    display: block;
+    max-width: 100%;
+    max-height: 180mm;
+    width: auto;
+    margin: 0 auto;
+    border: 0.5pt solid var(--borde);
+    border-radius: 3pt;
+}
+
+figcaption {
+    font-size: 9pt;
+    color: var(--suave);
+    text-align: center;
+    margin-top: 1.6mm;
+    font-style: italic;
+}
+
+.dos { display: flex; gap: 4mm; }
+.dos figure { flex: 1; min-width: 0; }
+.dos img { max-height: 150mm; }
+
+.enlaces {
+    border: 0.8pt solid var(--azul);
+    border-radius: 3pt;
+    padding: 4mm 5mm;
+    margin: 3mm 0 4mm;
+    background: #f7fafc;
+    page-break-inside: avoid;
+}
+
+.enlaces div { margin-bottom: 3mm; }
+.enlaces div:last-child { margin-bottom: 0; }
+
+.enlaces dt {
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    color: var(--suave);
+    margin-bottom: 0.8mm;
+}
+
+.enlaces dd {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 9.5pt;
+    color: var(--azul);
+    word-break: break-all;
+}
+
+.nota {
+    font-size: 9.5pt;
+    color: var(--suave);
+    border-left: 2pt solid var(--dorado);
+    padding-left: 3mm;
+    margin: 3mm 0;
+}
+
+/* ===== Ajustes de este reporte ===== */
+.datos dd.url { font-family: Menlo, Consolas, monospace; font-size: 9.5pt; color: var(--azul); }
+.portada .datos { margin-top: 5mm; }
+.vitrina img { max-height: 62mm; }
+.portada .bloque-titulo { padding: 8mm 0 6mm; }
+.portada .datos div { padding: 1.6mm 0; }
+.portada .fecha { margin-top: 4mm; }
+table.pruebas { page-break-inside: auto; }
+pre.diagrama { font-size: 7.8pt; padding: 2.5mm 3.5mm; }
+table.pruebas tr { page-break-inside: avoid; }
+table.pruebas td, table.pruebas th { padding: 1.3mm 2.4mm; line-height: 1.35; }
+.enlaces dd { font-size: 8.8pt; }
+td, th { padding: 1.5mm 2.4mm; }
+.cuatro { display: flex; gap: 3mm; margin-bottom: 2mm; }
+.cuatro figure { flex: 1; min-width: 0; margin: 0; }
+.cuatro img { width: 100%; max-height: none; }
+.cuatro figcaption { font-size: 8pt; }
+.dos img { max-height: 70mm; }
+.angosta img { max-height: 50mm; }
+.media img { max-height: 64mm; }
+figure img { max-height: 68mm; }
+h2, h3 { page-break-after: avoid; break-after: avoid; }
+.vitrina img { max-height: 68mm; }
+figure.grande img { max-height: 112mm; width: 100%; }
+</style>
+</head>
+<body>
+<!-- ================= PORTADA ================= -->
+<section class="portada salto">
+    <div class="encabezado-portada">
+        <img class="escudo" src="img/logo-unach.png" alt="Escudo UNACH">
+        <div>
+            <div class="universidad">Universidad Autónoma de Chiapas</div>
+            <div class="escuela">Escuela de Tecnologías Digitales Aplicadas · Campus IV Tapachula</div>
+        </div>
+    </div>
+
+    <div class="bloque-titulo">
+        <div class="materia">Desarrollo de Aplicaciones Web y Móviles</div>
+        <div class="practica">Práctica 3.1</div>
+        <h1 class="titulo">Tarjeta digital de un Empleado con código QR</h1>
+    </div>
+
+    <figure class="vitrina">
+        <img src="img/tarjeta.jpg" alt="Formulario para generar el RFC y tarjeta digital">
+        <figcaption>Formulario que calcula el RFC y tarjeta digital generada con código de barras y código QR.</figcaption>
+    </figure>
+
+    <dl class="datos">
+        <div><dt>Alumno</dt><dd>Ezequiel Peña Mazariegos</dd></div>
+        <div><dt>Matrícula</dt><dd>100017097</dd></div>
+        <div><dt>Semestre y grupo</dt><dd>7.º semestre · Grupo A</dd></div>
+        <div><dt>Docente</dt><dd>Dr. Christian Mauricio Castillo Estrada</dd></div>
+        <div><dt>Tecnología</dt><dd>Vue 3 + PrimeVue</dd></div>
+        <div><dt>Dominio (Vercel)</dt><dd class="url">https://tarjeta-empleado-unach.vercel.app</dd></div>
+        <div><dt>GitHub</dt><dd class="url">https://github.com/Ezequielpm/portafolio-dawm</dd></div>
+    </dl>
+
+    <div class="fecha">Tapachula, Chiapas · 8 de noviembre de 2026</div>
+</section>
+
+<!-- ================= EVIDENCIA ================= -->
+<section>
+<h2>1. Enlaces de entrega</h2>
+<dl class="enlaces">
+    <div>
+        <dt>Aplicación publicada (dominio gratuito en Vercel)</dt>
+        <dd>https://tarjeta-empleado-unach.vercel.app</dd>
+    </div>
+    <div>
+        <dt>Repositorio de código (GitHub)</dt>
+        <dd>https://github.com/Ezequielpm/portafolio-dawm</dd>
+    </div>
+    <div>
+        <dt>Código de esta práctica dentro del repositorio</dt>
+        <dd>https://github.com/Ezequielpm/portafolio-dawm/tree/main/actividades/05-vue-primevue</dd>
+    </div>
+</dl>
+
+<h2>2. Dashboard</h2>
+<figure class="grande">
+    <img src="img/dashboard.jpg" alt="Dashboard de la aplicación publicada">
+    <figcaption>Figura 1. Dashboard en https://tarjeta-empleado-unach.vercel.app/#/ con las tarjetas generadas y el menú de módulos.</figcaption>
+</figure>
+
+<h2>3. Tarjeta digital del empleado</h2>
+<figure class="grande">
+    <img src="img/tarjeta.jpg" alt="Formulario y tarjeta digital">
+    <figcaption>Figura 2. https://tarjeta-empleado-unach.vercel.app/#/formEmpleados: al presionar GENERAR se calcula el RFC y se arma la tarjeta.</figcaption>
+</figure>
+</section>
+
+<section>
+<h2>4. Descripción</h2>
+<p>La interfaz reproduce el mockup: barra superior con el menú ☰, menú lateral
+de módulos y, en la vista <strong>Tarjeta de empleado</strong>, el formulario
+<em>Generar el RFC de una persona</em> junto a la <em>Tarjeta digital</em>. Se
+hizo con <strong>Vue 3</strong> (componentes <code>&lt;script setup&gt;</code>
+y Vue Router) y componentes de <strong>PrimeVue</strong>: InputText,
+DatePicker, SelectButton, Button, Message, Toast, DataTable, Dialog y Tag.</p>
+
+<table>
+    <tr><th style="width:27%">Vista</th><th>Contenido</th></tr>
+    <tr><td>Dashboard</td><td>Indicadores (tarjetas generadas, empleadas, empleados) y últimas tarjetas.</td></tr>
+    <tr><td>Tarjeta de empleado</td><td>Formulario con validación y tarjeta con foto opcional, nombre, puesto, RFC, código QR y código de barras.</td></tr>
+    <tr><td>Empleados</td><td>Tabla con búsqueda y paginación; cada fila abre su tarjeta en un diálogo.</td></tr>
+    <tr><td>BarCode-QR</td><td>Generador libre de QR y código de barras con descarga en PNG/SVG.</td></tr>
+</table>
+
+<h3>Cálculo del RFC</h3>
+<p>El RFC (13 caracteres) se calcula con el algoritmo del SAT para personas
+físicas: cuatro letras del nombre (quitando artículos como DE o LA, omitiendo
+JOSÉ/MARÍA cuando hay más de un nombre y sustituyendo palabras altisonantes),
+la fecha AAMMDD, la homoclave de dos caracteres y el dígito verificador por
+módulo 11. Se comprobó con el ejemplo del instructivo del SAT
+(Emma Gómez Díaz, 31/12/1956 → <code>GODE561231GR8</code>).</p>
+
+<h3>Códigos</h3>
+<p>El código de barras CODE128 del RFC se dibuja con <code>JsBarcode</code> y
+el código QR con la librería <code>qrcode</code>. El QR contiene una vCard,
+así que al escanearlo con el celular se ofrece guardar el contacto con el
+nombre, el puesto, la institución y el RFC del empleado.</p>
+
+<h2>5. Conclusión</h2>
+<p>Vue permitió separar la interfaz en componentes reutilizables: la misma
+tarjeta se usa en el formulario y en el diálogo de la tabla, y la lista de
+empleados se comparte entre vistas mediante un <em>composable</em>. PrimeVue
+aportó componentes listos y consistentes (selector de fecha, mensajes de
+validación, tabla con filtros), lo que dejó el esfuerzo en la lógica del RFC y
+en el diseño de la tarjeta. La aplicación quedó publicada en Vercel y su código
+en GitHub.</p>
+</section>
+
+</body>
+</html>
