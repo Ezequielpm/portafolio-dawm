@@ -64,7 +64,7 @@ function fecha(iso) {
                 <ul v-if="recientes.length" class="lista">
                     <li v-for="e in recientes" :key="e.rfc">
                         <span class="avatar" :class="e.sexo === 'H' ? 'verde' : 'morado'">
-                            {{ e.nombre[0] }}{{ e.paterno[0] }}
+                            {{ (e.nombre[0] + e.paterno[0]).toUpperCase() }}
                         </span>
                         <div class="lista-datos">
                             <strong>{{ e.nombre }} {{ e.paterno }} {{ e.materno }}</strong>
@@ -246,7 +246,7 @@ function fecha(iso) {
 
 @media (max-width: 1199px) {
     .fila {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
