@@ -437,6 +437,7 @@ $(function () {
             $("#aviso-reemplazo").prop("hidden", true);
             $("#archivo-req").prop("hidden", false);
             $("#d-no_oficio").trigger("focus");
+            recuperarBorrador();
             return;
         }
 
@@ -552,7 +553,9 @@ $(function () {
             }
         })
             .done((r) => {
-                avisar(r.mensaje, "exito");
+                const pdf = r.tamano_pdf ? ` El PDF quedó guardado (${tamanoLegible(r.tamano_pdf)}).` : "";
+                avisar(r.mensaje + pdf, "exito");
+                if (!$("#d-id").val()) borrarBorrador();
                 limpiarCaptura();
                 cargarPendientes();
                 irA("ver/" + r.id);
@@ -565,6 +568,85 @@ $(function () {
             })
             .always(() => $boton.prop("disabled", false).find("span").text("Guardar documento"));
     });
+
+    /* ========================================================
+       Borrador del registro
+       En algunos celulares, al abrir la cámara el sistema cierra el
+       navegador para liberar memoria; al volver, la página se carga
+       de nuevo y el formulario saldría vacío. Para no perder lo
+       capturado, mientras se registra un documento nuevo los campos
+       y las fotos se copian a IndexedDB (en el propio celular) y se
+       recuperan al volver a #nuevo.
+       ======================================================== */
+
+    const CAMPOS = ["no_oficio", "fecha", "asunto", "remitente", "destinatario", "estatus"];
+
+    /* Hace una operación en el almacén «borrador» de la base local. */
+    function baseLocal(modo, operacion) {
+        return new Promise((resolver, rechazar) => {
+            const apertura = indexedDB.open("gestion-documentos", 1);
+            apertura.onupgradeneeded = () => apertura.result.createObjectStore("borrador");
+            apertura.onerror = () => rechazar(apertura.error);
+            apertura.onsuccess = () => {
+                const db = apertura.result;
+                const tx = db.transaction("borrador", modo);
+                const peticion = operacion(tx.objectStore("borrador"));
+                tx.oncomplete = () => { db.close(); resolver(peticion.result); };
+                tx.onerror = tx.onabort = () => { db.close(); rechazar(tx.error); };
+            };
+        });
+    }
+
+    function esRegistroNuevo() {
+        return $("#vista-formulario").hasClass("activa") && !$("#d-id").val();
+    }
+
+    /* Con «espera» (ms) se agrupan las teclas en una sola escritura. */
+    let pausaBorrador;
+    function guardarBorrador(espera) {
+        clearTimeout(pausaBorrador);
+        if (espera) {
+            pausaBorrador = setTimeout(guardarBorrador, espera);
+            return;
+        }
+        if (!esRegistroNuevo()) return;
+
+        const campos = {};
+        CAMPOS.forEach((c) => (campos[c] = $("#d-" + c).val()));
+        baseLocal("readwrite", (almacen) => almacen.put({
+            campos,
+            pdf: captura.pdf,
+            fotos: captura.fotos.map((f) => f.blob)
+        }, "nuevo")).catch(() => { /* sin IndexedDB (modo privado) no hay borrador */ });
+    }
+
+    function borrarBorrador() {
+        clearTimeout(pausaBorrador);
+        return baseLocal("readwrite", (almacen) => almacen.delete("nuevo")).catch(() => {});
+    }
+
+    async function recuperarBorrador() {
+        let b = null;
+        try {
+            b = await baseLocal("readonly", (almacen) => almacen.get("nuevo"));
+        } catch (e) { /* sin IndexedDB */ }
+        if (!esRegistroNuevo()) return;   // se cambió de vista mientras se leía
+
+        const hayDatos = Boolean(b) && (["no_oficio", "asunto", "remitente", "destinatario"].some((c) => b.campos[c])
+            || b.pdf || b.fotos.length > 0);
+        if (hayDatos) {
+            CAMPOS.forEach((c) => { if (b.campos[c]) $("#d-" + c).val(b.campos[c]); });
+            pintarPuntoEstatus();
+            captura.pdf = b.pdf || null;
+            captura.fotos = b.fotos.map((blob) => ({ blob, url: URL.createObjectURL(blob) }));
+            pintarCaptura();
+        }
+    }
+
+    $form.on("input", "input:not([type=file]), textarea", () => guardarBorrador(300));
+    $form.on("change", "input:not([type=file]), textarea, select", () => guardarBorrador());
+
+    $("#btn-cancelar").on("click", () => { if (esRegistroNuevo()) borrarBorrador(); });
 
     /* ========================================================
        Digitalización: cámara, fotos y PDF
@@ -583,6 +665,17 @@ $(function () {
 
     function pintarCaptura() {
         const $previa = $("#vista-previa").empty();
+        const paginas = captura.fotos.length;
+
+        /* Confirma con texto lo que se va a guardar; la miniatura sola se pierde de vista en el celular. */
+        let estado = "";
+        if (captura.pdf) {
+            estado = "PDF listo. Se subirá al presionar «Guardar documento».";
+        } else if (paginas) {
+            estado = `${paginas} página${paginas === 1 ? " lista" : "s listas"} (${tamanoLegible(tamanoCaptura())}). `
+                   + "Al presionar «Guardar documento» se convertirá en PDF.";
+        }
+        $("#estado-captura").html(estado && icono("listo") + esc(estado));
 
         if (captura.pdf) {
             $previa.append(`
@@ -613,7 +706,12 @@ $(function () {
             captura.fotos.splice(cual, 1);
         }
         pintarCaptura();
+        guardarBorrador();
     });
+
+    /* Antes de salir a la cámara se guarda el borrador, por si el
+       sistema cierra el navegador mientras tanto. */
+    $("#in-camara").on("click", () => guardarBorrador());
 
     $("#in-camara, #in-archivo").on("change", function () {
         const archivos = Array.from(this.files);
@@ -639,10 +737,13 @@ $(function () {
             limpiarCaptura();       // un PDF reemplaza a las fotos
             captura.pdf = pdfs[0];
             pintarCaptura();
+            guardarBorrador();
+            avisar("PDF agregado.", "exito");
             return;
         }
 
         captura.pdf = null;         // una foto reemplaza al PDF
+        let agregadas = 0;
         for (const imagen of imagenes) {
             if (captura.fotos.length >= PAGINAS_MAXIMAS) {
                 avisar(`Máximo ${PAGINAS_MAXIMAS} páginas por documento.`, "error");
@@ -651,10 +752,17 @@ $(function () {
             try {
                 const blob = await reducirImagen(imagen);
                 captura.fotos.push({ blob, url: URL.createObjectURL(blob) });
+                agregadas++;
                 pintarCaptura();
             } catch (err) {
                 avisar(`No se pudo leer «${imagen.name}». Usa una imagen JPG o PNG.`, "error");
             }
+        }
+
+        if (agregadas) {
+            guardarBorrador();
+            avisar(agregadas === 1 ? `Foto agregada como página ${captura.fotos.length}.` : `${agregadas} fotos agregadas.`, "exito");
+            $("#estado-captura")[0].scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
     }
 
@@ -725,7 +833,14 @@ $(function () {
             const urlPdf = `${API}pdf.php?id=${d.id_documento}`;
             $(".visor").toggle(d.tiene_pdf);
             if (d.tiene_pdf) {
-                $("#det-visor").attr("src", urlPdf);
+                $("#det-pdf-estado").html(icono("listo") + "PDF guardado" + (d.tamano_pdf ? " · " + tamanoLegible(d.tamano_pdf) : ""));
+
+                /* Chrome en Android no muestra PDF dentro de un iframe (se ve
+                   un recuadro gris); ahí se avisa y se usan Abrir y Descargar. */
+                const conVisor = navigator.pdfViewerEnabled !== false;
+                $("#det-con-visor").prop("hidden", !conVisor);
+                $("#det-sin-visor").prop("hidden", conVisor);
+                if (conVisor) $("#det-visor").attr("src", urlPdf);
                 $("#det-abrir").attr("href", urlPdf);
                 $("#det-descargar").attr("href", urlPdf + "&descargar=1");
             }

@@ -131,7 +131,8 @@ try {
 }
 
 responderJson([
-    'ok'      => true,
-    'id'      => $id,
-    'mensaje' => $esEdicion ? 'Documento actualizado.' : 'Documento registrado.',
+    'ok'         => true,
+    'id'         => $id,
+    'mensaje'    => $esEdicion ? 'Documento actualizado.' : 'Documento registrado.',
+    'tamano_pdf' => $archivo !== null ? strlen($archivo['contenido']) : null,   // null: se conservó el PDF anterior
 ], $esEdicion ? 200 : 201);

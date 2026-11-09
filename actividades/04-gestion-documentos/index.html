@@ -26,6 +26,7 @@
         <symbol id="i-camara" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></symbol>
         <symbol id="i-subir" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></symbol>
         <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+        <symbol id="i-listo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
         <symbol id="i-externo" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
         <symbol id="i-filtro" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></symbol>
         <symbol id="i-atras" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
@@ -349,7 +350,8 @@
                                 Máximo 4&nbsp;MB en total y 10 páginas.
                             </p>
 
-                            <div class="vista-previa" id="vista-previa" aria-live="polite"></div>
+                            <div class="vista-previa" id="vista-previa"></div>
+                            <p class="estado-captura" id="estado-captura" aria-live="polite"></p>
                             <div class="invalid-feedback d-block" data-error="archivo"></div>
                         </fieldset>
 
@@ -362,7 +364,7 @@
                     </div>
 
                     <div class="card-footer bg-white p-3 d-grid d-sm-flex justify-content-sm-end gap-2">
-                        <a class="btn btn-outline-secondary order-2 order-sm-1" href="#documentos">Cancelar</a>
+                        <a class="btn btn-outline-secondary order-2 order-sm-1" href="#documentos" id="btn-cancelar">Cancelar</a>
                         <button type="submit" class="btn btn-primary btn-lg order-1 order-sm-2" id="btn-guardar">
                             <svg><use href="#i-documentos"/></svg><span>Guardar documento</span>
                         </button>
@@ -411,16 +413,27 @@
                     <div class="col-12 col-lg-7 col-xl-8">
                         <div class="card visor">
                             <div class="card-header bg-white d-flex flex-wrap align-items-center justify-content-between gap-2">
-                                <h2 class="h6 mb-0">Documento digitalizado</h2>
+                                <div>
+                                    <h2 class="h6 mb-0">Documento digitalizado</h2>
+                                    <small class="pdf-guardado" id="det-pdf-estado"></small>
+                                </div>
                                 <div class="d-flex gap-2">
                                     <a class="btn btn-sm btn-outline-secondary" id="det-abrir" href="#" target="_blank" rel="noopener"><svg><use href="#i-externo"/></svg>Abrir</a>
                                     <a class="btn btn-sm btn-primary" id="det-descargar" href="#"><svg><use href="#i-descargar"/></svg>Descargar</a>
                                 </div>
                             </div>
                             <div class="card-body p-2">
-                                <iframe id="det-visor" title="Vista del PDF"></iframe>
-                                <p class="form-text mb-0 px-1">En algunos celulares el visor solo muestra la primera página; usa
-                                    <strong>Abrir</strong> para ver el documento completo.</p>
+                                <div id="det-con-visor">
+                                    <iframe id="det-visor" title="Vista del PDF"></iframe>
+                                    <p class="form-text mb-0 px-1">En algunos celulares el visor solo muestra la primera página; usa
+                                        <strong>Abrir</strong> para ver el documento completo.</p>
+                                </div>
+                                <!-- Chrome en Android no muestra un PDF dentro de la página. -->
+                                <div class="sin-visor" id="det-sin-visor" hidden>
+                                    <svg aria-hidden="true"><use href="#i-pdf"/></svg>
+                                    <p class="mb-0">El PDF está guardado. Este navegador no puede mostrarlo dentro de la
+                                        página: usa <strong>Abrir</strong> para verlo o <strong>Descargar</strong> para guardarlo.</p>
+                                </div>
                             </div>
                         </div>
                     </div>

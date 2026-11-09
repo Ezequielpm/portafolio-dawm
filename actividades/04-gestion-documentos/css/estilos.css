@@ -513,6 +513,23 @@ h1, h2, .h3, .h4, .h6 { color: var(--azul-oscuro); }
 .archivo-pdf small { color: #66707d; }
 .archivo-pdf .quitar { position: static; color: #66707d; background: none; }
 
+/* «2 páginas listas…» debajo de las miniaturas. */
+.estado-captura {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0 0;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--recibido);
+    background-color: var(--recibido-fondo);
+    border-radius: 8px;
+}
+
+.estado-captura:empty { display: none; }
+.estado-captura svg { flex: none; width: 20px; height: 20px; }
+
 .progress-bar { background-color: var(--azul-accion); }
 
 /* ===== Detalle ===== */
@@ -587,6 +604,28 @@ h1, h2, .h3, .h4, .h6 { color: var(--azul-oscuro); }
     border: 0;
     border-radius: 6px;
 }
+
+.pdf-guardado {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    color: var(--recibido);
+}
+
+.pdf-guardado svg { width: 16px; height: 16px; }
+
+.sin-visor {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    font-size: 14px;
+    background-color: var(--fondo);
+    border-radius: 6px;
+}
+
+.sin-visor svg { flex: none; width: 40px; height: 40px; color: #d93025; }
 
 /* ===== Avisos ===== */
 .avisos {

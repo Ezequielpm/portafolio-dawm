@@ -16,9 +16,10 @@ if ($id === null) {
 $pdo = conectaDB();
 
 $consulta = $pdo->prepare(
-    'SELECT id_documento, no_oficio, fecha, asunto, remitente, destinatario, estatus,
-            archivo_pdf IS NOT NULL AS tiene_pdf, creado_en, actualizado_en
-     FROM documentos WHERE id_documento = :id'
+    'SELECT d.id_documento, d.no_oficio, d.fecha, d.asunto, d.remitente, d.destinatario, d.estatus,
+            d.archivo_pdf IS NOT NULL AS tiene_pdf, a.tamano AS tamano_pdf, d.creado_en, d.actualizado_en
+     FROM documentos d LEFT JOIN archivos_pdf a ON a.id_documento = d.id_documento
+     WHERE d.id_documento = :id'
 );
 $consulta->execute([':id' => $id]);
 $documento = $consulta->fetch();
@@ -28,6 +29,7 @@ if (!$documento) {
 }
 $documento['id_documento'] = (int) $documento['id_documento'];
 $documento['tiene_pdf'] = (bool) $documento['tiene_pdf'];
+$documento['tamano_pdf'] = $documento['tamano_pdf'] === null ? null : (int) $documento['tamano_pdf'];
 
 $consulta = $pdo->prepare(
     'SELECT estatus_anterior, estatus_nuevo, fecha_cambio
