@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte — App de Punto de Venta con DataTable</title>
+<style>
+<style>
+@page { size: Letter; margin: 18mm 16mm; }
+
+:root {
+    --azul: #123a5e;
+    --azul-claro: #1e5c92;
+    --dorado: #c9a227;
+    --texto: #2b3440;
+    --suave: #5c6672;
+    --borde: #d8dee6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--texto);
+    font-size: 11pt;
+    line-height: 1.55;
+}
+
+.salto { page-break-after: always; }
+
+/* ===== Portada ===== */
+.portada {
+    height: 232mm;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.encabezado-portada {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6mm;
+    text-align: left;
+    padding-bottom: 5mm;
+    border-bottom: 1.6pt solid var(--dorado);
+}
+
+.encabezado-portada img.escudo { width: 20mm; flex-shrink: 0; }
+
+.portada .universidad {
+    font-family: Georgia, serif;
+    font-size: 15pt;
+    color: var(--azul);
+    line-height: 1.25;
+}
+
+.portada .escuela {
+    font-size: 10pt;
+    color: var(--suave);
+    margin-top: 1mm;
+}
+
+.bloque-titulo { padding: 12mm 0 9mm; }
+
+.portada .materia {
+    font-size: 10.5pt;
+    font-weight: 600;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    color: var(--dorado);
+}
+
+.portada .practica {
+    font-size: 10.5pt;
+    font-weight: 600;
+    letter-spacing: 0.6pt;
+    text-transform: uppercase;
+    color: var(--suave);
+    margin-top: 6mm;
+}
+
+.portada .titulo {
+    font-family: Georgia, serif;
+    font-size: 24pt;
+    line-height: 1.22;
+    color: var(--azul);
+    margin: 2.5mm auto 0;
+    max-width: 142mm;
+}
+
+.vitrina {
+    padding: 0 4mm;
+    margin-bottom: auto;
+}
+
+.vitrina img {
+    width: 100%;
+    border: 0.5pt solid var(--borde);
+    border-radius: 4pt;
+}
+
+.vitrina figcaption {
+    font-size: 8.5pt;
+    color: var(--suave);
+    font-style: italic;
+    margin-top: 2.5mm;
+}
+
+.datos {
+    width: 100%;
+    text-align: left;
+    border-top: 1pt solid var(--borde);
+    padding-top: 5mm;
+    margin-top: 8mm;
+}
+
+.datos div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 2mm 0;
+    border-bottom: 0.5pt dotted var(--borde);
+    font-size: 10.5pt;
+}
+
+.datos dt {
+    font-weight: 600;
+    color: var(--suave);
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.4pt;
+}
+
+.datos dd { text-align: right; font-weight: 600; }
+
+.fecha {
+    margin-top: 5mm;
+    font-size: 10pt;
+    color: var(--suave);
+    text-align: center;
+}
+
+/* ===== Cuerpo ===== */
+h2 {
+    font-family: Georgia, serif;
+    font-size: 15pt;
+    color: var(--azul);
+    margin: 9mm 0 2mm;
+    padding-bottom: 1.6mm;
+    border-bottom: 1.6pt solid var(--dorado);
+}
+
+h2:first-of-type { margin-top: 0; }
+
+h3 {
+    font-size: 11.5pt;
+    color: var(--azul);
+    margin: 6mm 0 1.5mm;
+}
+
+p { margin-bottom: 2.6mm; text-align: justify; }
+
+ul, ol { margin: 0 0 3mm 6mm; }
+li { margin-bottom: 1.2mm; }
+
+code {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 9pt;
+    background: #f1f4f8;
+    border: 0.5pt solid var(--borde);
+    border-radius: 2pt;
+    padding: 0.4pt 2pt;
+}
+
+pre {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 8.5pt;
+    line-height: 1.45;
+    background: #f7f9fb;
+    border: 0.5pt solid var(--borde);
+    border-left: 2.4pt solid var(--azul-claro);
+    border-radius: 3pt;
+    padding: 3mm 4mm;
+    margin-bottom: 3mm;
+    white-space: pre-wrap;
+    page-break-inside: avoid;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin-bottom: 3mm;
+    page-break-inside: avoid;
+}
+
+th, td {
+    border: 0.5pt solid var(--borde);
+    padding: 2mm 2.6mm;
+    text-align: left;
+    vertical-align: top;
+}
+
+th { background: #eef2f6; color: var(--azul); font-size: 9.5pt; }
+
+td code { font-size: 8pt; }
+
+figure { margin: 3mm 0 5mm; page-break-inside: avoid; }
+
+figure img {
+    display: block;
+    max-width: 100%;
+    max-height: 180mm;
+    width: auto;
+    margin: 0 auto;
+    border: 0.5pt solid var(--borde);
+    border-radius: 3pt;
+}
+
+figcaption {
+    font-size: 9pt;
+    color: var(--suave);
+    text-align: center;
+    margin-top: 1.6mm;
+    font-style: italic;
+}
+
+.dos { display: flex; gap: 4mm; }
+.dos figure { flex: 1; min-width: 0; }
+.dos img { max-height: 150mm; }
+
+.enlaces {
+    border: 0.8pt solid var(--azul);
+    border-radius: 3pt;
+    padding: 4mm 5mm;
+    margin: 3mm 0 4mm;
+    background: #f7fafc;
+    page-break-inside: avoid;
+}
+
+.enlaces div { margin-bottom: 3mm; }
+.enlaces div:last-child { margin-bottom: 0; }
+
+.enlaces dt {
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    color: var(--suave);
+    margin-bottom: 0.8mm;
+}
+
+.enlaces dd {
+    font-family: Menlo, Consolas, monospace;
+    font-size: 9.5pt;
+    color: var(--azul);
+    word-break: break-all;
+}
+
+.nota {
+    font-size: 9.5pt;
+    color: var(--suave);
+    border-left: 2pt solid var(--dorado);
+    padding-left: 3mm;
+    margin: 3mm 0;
+}
+
+/* ===== Ajustes de este reporte ===== */
+.datos dd.url { font-family: Menlo, Consolas, monospace; font-size: 9.5pt; color: var(--azul); }
+.portada .datos { margin-top: 5mm; }
+.vitrina img { max-height: 62mm; }
+.portada .bloque-titulo { padding: 8mm 0 6mm; }
+.portada .datos div { padding: 1.6mm 0; }
+.portada .fecha { margin-top: 4mm; }
+table.pruebas { page-break-inside: auto; }
+pre.diagrama { font-size: 7.8pt; padding: 2.5mm 3.5mm; }
+table.pruebas tr { page-break-inside: avoid; }
+table.pruebas td, table.pruebas th { padding: 1.3mm 2.4mm; line-height: 1.35; }
+.enlaces dd { font-size: 8.8pt; }
+td, th { padding: 1.5mm 2.4mm; }
+.cuatro { display: flex; gap: 3mm; margin-bottom: 2mm; }
+.cuatro figure { flex: 1; min-width: 0; margin: 0; }
+.cuatro img { width: 100%; max-height: none; }
+.cuatro figcaption { font-size: 8pt; }
+.dos img { max-height: 70mm; }
+.angosta img { max-height: 50mm; }
+.media img { max-height: 64mm; }
+figure img { max-height: 68mm; }
+h2, h3 { page-break-after: avoid; break-after: avoid; }
+.vitrina img { max-height: 68mm; }
+figure.grande img { max-height: 112mm; width: 100%; }
+/* ===== Ajustes de este reporte ===== */
+.datos dd.url { font-family: Menlo, Consolas, monospace; font-size: 9.5pt; color: var(--azul); }
+.portada .bloque-titulo { padding: 8mm 0 6mm; }
+.portada .datos { margin-top: 5mm; }
+.portada .datos div { padding: 1.6mm 0; }
+.portada .fecha { margin-top: 4mm; }
+.vitrina img { max-height: 76mm; width: auto; max-width: 100%; }
+figure img { max-height: 80mm; }
+figure.grande img { max-height: 84mm; width: auto; max-width: 100%; }
+.dos img { max-height: 62mm; }
+.movil img { max-height: 120mm; }
+table.pruebas { page-break-inside: auto; }
+table.pruebas tr { page-break-inside: avoid; }
+table.pruebas td, table.pruebas th { padding: 1.3mm 2.4mm; line-height: 1.35; }
+td, th { padding: 1.5mm 2.4mm; }
+pre { font-size: 8.2pt; }
+pre.largo { page-break-inside: auto; }
+figure.chica img { max-height: 66mm; }
+h2, h3 { page-break-after: avoid; break-after: avoid; }
+.lado { display: flex; gap: 5mm; align-items: flex-start; }
+.lado .texto { flex: 1.4; }
+.lado figure { flex: 1; margin-top: 0; }
+</style>
+</head>
+<body>
+<!-- ================= PORTADA ================= -->
+<section class="portada salto">
+    <div class="encabezado-portada">
+        <img class="escudo" src="img/logo-unach.png" alt="Escudo UNACH">
+        <div>
+            <div class="universidad">Universidad Autónoma de Chiapas</div>
+            <div class="escuela">Escuela de Tecnologías Digitales Aplicadas · Campus IV Tapachula</div>
+        </div>
+    </div>
+
+    <div class="bloque-titulo">
+        <div class="materia">Desarrollo de Aplicaciones Web y Móviles</div>
+        <div class="practica">Práctica 3.2</div>
+        <h1 class="titulo">App de Punto de Venta con el componente DataTable</h1>
+    </div>
+
+    <figure class="vitrina">
+        <img src="img/inicial.jpg" alt="Interfaz del punto de venta">
+        <figcaption>Interfaz del punto de venta con los productos del ejemplo de la práctica.</figcaption>
+    </figure>
+
+    <dl class="datos">
+        <div><dt>Alumno</dt><dd>Ezequiel Peña Mazariegos</dd></div>
+        <div><dt>Matrícula</dt><dd>100017097</dd></div>
+        <div><dt>Semestre y grupo</dt><dd>7.º semestre · Grupo A</dd></div>
+        <div><dt>Docente</dt><dd>Dr. Christian Mauricio Castillo Estrada</dd></div>
+        <div><dt>Tecnología</dt><dd>Vue 3 + PrimeVue (DataTable)</dd></div>
+        <div><dt>Dominio (Vercel)</dt><dd class="url">https://punto-de-venta-unach.vercel.app</dd></div>
+        <div><dt>GitHub</dt><dd class="url">https://github.com/Ezequielpm/portafolio-dawm</dd></div>
+    </dl>
+
+    <div class="fecha">Tapachula, Chiapas · 10 de noviembre de 2026</div>
+</section>
+
+<!-- ================= CUERPO ================= -->
+<section>
+<h2>1. Problemática y objetivo</h2>
+<p>En un mostrador, el cajero necesita capturar rápido lo que el cliente
+lleva, corregir una cantidad o quitar un artículo sin empezar de nuevo, y
+conocer en todo momento cuánto va a cobrar con impuestos incluidos. Hacer esas
+cuentas a mano, o en una tabla que no se recalcula sola, provoca errores de
+cobro.</p>
+<p>El objetivo de la práctica fue desarrollar, con <strong>Vue 3</strong> y el
+componente <strong>DataTable de PrimeVue</strong>, una interfaz que simule un
+punto de venta: <strong>registrar, editar y eliminar</strong> productos de una
+compra y <strong>calcular el Subtotal, el IVA (16&nbsp;%) y el Total a
+pagar</strong>, siguiendo la imagen de referencia de la actividad.</p>
+
+<h2>2. Enlaces de entrega</h2>
+<dl class="enlaces">
+    <div>
+        <dt>Aplicación publicada (dominio gratuito en Vercel)</dt>
+        <dd>https://punto-de-venta-unach.vercel.app</dd>
+    </div>
+    <div>
+        <dt>Repositorio de código (GitHub)</dt>
+        <dd>https://github.com/Ezequielpm/portafolio-dawm</dd>
+    </div>
+    <div>
+        <dt>Código de esta práctica dentro del repositorio</dt>
+        <dd>https://github.com/Ezequielpm/portafolio-dawm/tree/main/actividades/06-punto-de-venta</dd>
+    </div>
+</dl>
+
+<h2>3. Tecnologías y arquitectura</h2>
+<table>
+    <tr><th style="width:24%">Pieza</th><th>Tecnología y función</th></tr>
+    <tr><td>Framework</td><td><strong>Vue 3.5</strong> con componentes de archivo único y <code>&lt;script setup&gt;</code>; el formulario usa <code>reactive</code> y los totales son propiedades <code>computed</code>.</td></tr>
+    <tr><td>Componentes de UI</td><td><strong>PrimeVue 4.5</strong> con el tema Aura en verde (como los botones de la referencia): <strong>DataTable</strong> y <strong>Column</strong>, InputText, InputNumber, Button, Toast, ConfirmPopup y PrimeIcons.</td></tr>
+    <tr><td>Estado</td><td>Un <em>composable</em> (<code>useVenta.js</code>) guarda la lista de productos, calcula los totales y la conserva en <code>localStorage</code>.</td></tr>
+    <tr><td>Herramientas</td><td><strong>Vite 8</strong> para desarrollo y compilación; publicación en <strong>Vercel</strong>.</td></tr>
+</table>
+
+<pre class="diagrama">06-punto-de-venta/
+├── index.html
+└── src/
+    ├── main.js                  PrimeVue, tema Aura verde, Toast y ConfirmPopup
+    ├── App.vue                  formulario de captura, DataTable y totales
+    ├── composables/useVenta.js  productos, registrar/actualizar/eliminar, Subtotal, IVA y Total
+    └── style.css                estilos generales</pre>
+<p>Se usó PrimeVue 4.5 porque tiene licencia MIT; PrimeVue 5 pasó a una
+licencia comercial que, sin clave registrada, muestra un aviso sobre la
+página.</p>
+</section>
+
+<section>
+<h2>4. Procedimiento para usar el DataTable de PrimeVue</h2>
+
+<h3>4.1 Instalación y registro</h3>
+<p>Se creó el proyecto con Vite y se instalaron PrimeVue, su paquete de temas
+y los íconos. En <code>main.js</code> se registra PrimeVue con el tema Aura, y
+los servicios de notificaciones y de confirmación:</p>
+<pre>npm create vite@latest 06-punto-de-venta -- --template vue
+npm install primevue@4 @primeuix/themes primeicons</pre>
+<pre>import PrimeVue from 'primevue/config'
+import ToastService from 'primevue/toastservice'
+import ConfirmationService from 'primevue/confirmationservice'
+import Aura from '@primeuix/themes/aura'
+import 'primeicons/primeicons.css'
+
+app.use(PrimeVue, { theme: { preset: Tema } })   // Tema = Aura con primario verde
+app.use(ToastService)
+app.use(ConfirmationService)</pre>
+
+<h3>4.2 Datos de la tabla</h3>
+<p>El DataTable recibe un arreglo de objetos en la propiedad
+<code>value</code>. Cada producto tiene su consecutivo (<code>cns</code>), el
+nombre, el precio unitario y la cantidad; el precio parcial no se guarda, se
+calcula al mostrarlo. La lista es un <code>ref</code>, así que cualquier
+cambio vuelve a dibujar la tabla y los totales:</p>
+<pre>const productos = ref([
+  { cns: 1, nombre: 'Impresora LaserJet Color', precio: 5200, cantidad: 2 },
+  { cns: 2, nombre: 'Monitor LED 31 plg.',      precio: 1700, cantidad: 3 }
+])</pre>
+
+<h3>4.3 Columnas, ordenamiento y paginación</h3>
+<p>Cada <code>&lt;Column&gt;</code> indica el campo (<code>field</code>) y el
+encabezado (<code>header</code>); con <code>sortable</code> el encabezado
+ordena al hacer clic. Las columnas de dinero usan la plantilla
+<code>#body</code> para dar formato de moneda, y la de acciones contiene los
+botones de editar y eliminar. La paginación se activa con
+<code>paginator</code>, y <code>paginatorTemplate</code> acomoda los
+controles como en la referencia: primera, anterior, números, siguiente,
+última, el texto «Visualizando…» y el selector de filas.</p>
+<pre class="largo">&lt;DataTable :value="productos" dataKey="cns" sortField="cns" :sortOrder="1"
+           paginator v-model:first="primera" v-model:rows="filas"
+           :rowsPerPageOptions="[5, 10, 20]" :rowClass="claseFila"
+           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink
+                              LastPageLink CurrentPageReport RowsPerPageDropdown"
+           currentPageReportTemplate="Visualizando {first}–{last} de {totalRecords} productos"&gt;
+  &lt;Column field="cns" header="Cns" sortable /&gt;
+  &lt;Column field="nombre" header="Nombre del Producto" sortable /&gt;
+  &lt;Column field="precio" header="Precio U." sortable&gt;
+    &lt;template #body="{ data }"&gt;{{ moneda.format(data.precio) }}&lt;/template&gt;
+  &lt;/Column&gt;
+  &lt;Column field="cantidad" header="Cant." sortable /&gt;
+  &lt;Column header="Precio P." sortable :sortField="importe"&gt;
+    &lt;template #body="{ data }"&gt;{{ moneda.format(importe(data)) }}&lt;/template&gt;
+  &lt;/Column&gt;
+  &lt;Column header="Acciones"&gt;
+    &lt;template #body="{ data }"&gt;
+      &lt;Button icon="pi pi-pencil" severity="success" @click="editar(data)" /&gt;
+      &lt;Button icon="pi pi-trash" severity="danger" @click="borrar($event, data)" /&gt;
+    &lt;/template&gt;
+  &lt;/Column&gt;
+&lt;/DataTable&gt;</pre>
+<p>Como «Precio P.» no es un campo guardado, su <code>sortField</code> recibe
+la función <code>importe</code> y la tabla ordena por el valor calculado.
+<code>v-model:first</code> permite que el programa cambie de página: al
+registrar, la tabla salta a la página donde quedó el producto nuevo, y al
+eliminar el último de una página regresa a la anterior. <code>rowClass</code>
+resalta la fila que se está editando.</p>
+
+<h3>4.4 Registrar, editar y eliminar</h3>
+<p>Las tres operaciones viven en <code>useVenta.js</code> y solo modifican el
+arreglo; el DataTable se actualiza solo:</p>
+<pre>function registrar({ nombre, precio, cantidad }) {
+  const cns = productos.value.reduce((max, p) =&gt; Math.max(max, p.cns), 0) + 1
+  productos.value.push({ cns, nombre, precio, cantidad })
+}
+function actualizar(cns, datos) {
+  const i = productos.value.findIndex(p =&gt; p.cns === cns)
+  if (i !== -1) productos.value[i] = { ...productos.value[i], ...datos }
+}
+function eliminar(cns) {
+  productos.value = productos.value.filter(p =&gt; p.cns !== cns)
+}</pre>
+<p>El consecutivo nuevo es el mayor existente más uno, de modo que no se
+repite aunque se hayan eliminado productos intermedios.</p>
+
+<h3>4.5 Cálculo del Subtotal, IVA y Total</h3>
+<p>Los tres importes son propiedades <code>computed</code>: se recalculan cada
+vez que cambia un producto. Las cuentas se hacen en <strong>centavos
+enteros</strong> para evitar los residuos de los decimales en JavaScript
+(por ejemplo, 0.1 + 0.2 = 0.30000000000000004), y el IVA se redondea al
+centavo:</p>
+<pre>const subtotal = computed(() =&gt;
+  productos.value.reduce((s, p) =&gt; s + Math.round(p.precio * 100) * p.cantidad, 0) / 100)
+const iva   = computed(() =&gt; Math.round(subtotal.value * 100 * 0.16) / 100)
+const total = computed(() =&gt; (Math.round(subtotal.value * 100) + Math.round(iva.value * 100)) / 100)</pre>
+<p>Con los productos de la imagen de referencia: Subtotal = 10,400 + 5,100 =
+<strong>$15,500.00</strong>; IVA = 15,500 × 0.16 = <strong>$2,480.00</strong>;
+Total = <strong>$17,980.00</strong>, igual que en la actividad.</p>
+</section>
+
+<section>
+<h2>5. Funcionalidades</h2>
+
+<h3>5.1 Registrar un producto</h3>
+<p>Se escribe el nombre, la cantidad y el precio unitario (un InputNumber en
+pesos mexicanos) y se presiona <strong>Registrar</strong> o la tecla Enter. El
+producto aparece en la tabla con su consecutivo y su precio parcial, los
+totales se actualizan, una notificación confirma el registro y el cursor
+vuelve al nombre para capturar el siguiente.</p>
+<figure class="grande">
+    <img src="img/registro.jpg" alt="Producto registrado">
+    <figcaption>Figura 1. Tres productos registrados además de los dos de la referencia.</figcaption>
+</figure>
+
+<h3>5.2 Validación</h3>
+<p>Si falta el nombre, la cantidad no es un entero mayor a cero o el precio
+no es mayor a cero, los campos se marcan en rojo, aparece un aviso y no se
+registra nada.</p>
+<figure class="chica">
+    <img src="img/validacion.jpg" alt="Validación del formulario">
+    <figcaption>Figura 2. Intento de registrar con el formulario vacío.</figcaption>
+</figure>
+
+<h3>5.3 Editar</h3>
+<p>El botón verde con el lápiz carga el producto en el formulario. El panel
+se pinta de verde, la fila queda resaltada y el botón cambia a
+<strong>Actualizar</strong>; también aparece <strong>Cancelar</strong> para
+salir sin cambios. Al actualizar, la fila y los totales cambian al
+instante.</p>
+<figure class="grande">
+    <img src="img/edicion.jpg" alt="Edición de un producto">
+    <figcaption>Figura 3. Edición del monitor: la cantidad cambia de 3 a 4.</figcaption>
+</figure>
+
+<h3>5.4 Eliminar</h3>
+<p>El botón rojo abre un ConfirmPopup junto a la fila para evitar borrados
+por accidente. Al confirmar, el producto sale de la tabla y se descuenta de
+los totales. El botón <strong>Nueva venta</strong> del encabezado vacía toda
+la lista, también con confirmación.</p>
+<figure class="grande">
+    <img src="img/eliminar.jpg" alt="Confirmación para eliminar">
+    <figcaption>Figura 4. Confirmación antes de eliminar el mouse ergonómico.</figcaption>
+</figure>
+
+<h3>5.5 Ordenamiento y paginación</h3>
+<p>Todas las columnas de datos se ordenan con clic en su encabezado (un
+segundo clic invierte el orden). La tabla muestra 5 productos por página,
+como la referencia, y el selector permite ver 10 o 20.</p>
+<div class="dos">
+    <figure>
+        <img src="img/orden.jpg" alt="Tabla ordenada por precio parcial">
+        <figcaption>Figura 5. Orden descendente por Precio P.</figcaption>
+    </figure>
+    <figure>
+        <img src="img/paginacion.jpg" alt="Segunda página">
+        <figcaption>Figura 6. Con 6 productos la tabla pasa a la página 2.</figcaption>
+    </figure>
+</div>
+
+<h3>5.6 Persistencia y diseño responsivo</h3>
+<div class="lado">
+    <div class="texto">
+        <p>La venta se guarda en <code>localStorage</code>: al recargar la
+        página los productos y los totales siguen ahí. La primera vez que se
+        abre la aplicación aparecen los dos productos de la imagen de
+        referencia.</p>
+        <p>Por debajo de 760&nbsp;px el formulario se reacomoda en dos
+        columnas, el botón ocupa todo el ancho, los totales se apilan y la
+        tabla se desliza horizontalmente dentro de su marco, con una
+        indicación para el usuario. La página no se desborda a 390&nbsp;px de
+        ancho (figura 7).</p>
+    </div>
+    <figure class="movil">
+        <img src="img/movil.jpg" alt="Vista en celular">
+        <figcaption>Figura 7. Versión publicada a 390 px.</figcaption>
+    </figure>
+</div>
+</section>
+
+<section>
+<h2>6. Pruebas</h2>
+<p>Las pruebas se automatizaron con Chrome sin interfaz (Puppeteer) sobre la
+versión publicada en Vercel, a 1280&nbsp;px y a 390&nbsp;px de ancho:</p>
+<table class="pruebas">
+    <thead><tr><th style="width:50%">Prueba</th><th>Resultado</th></tr></thead>
+    <tr><td>Abrir por primera vez</td><td>Dos productos; $15,500.00 / $2,480.00 / $17,980.00, igual que la referencia</td></tr>
+    <tr><td>Registrar con el formulario vacío</td><td>Tres campos en rojo, aviso y ningún registro</td></tr>
+    <tr><td>Registrar teclado (4 × $899.50), mouse (5 × $349) y SSD (2 × $1,459.99)</td><td>Subtotal $23,762.98; IVA $3,802.08 (redondeado de 3,802.0768); Total $27,565.06</td></tr>
+    <tr><td>Registrar un sexto producto</td><td>Aparece la página 2 y la tabla salta a ella</td></tr>
+    <tr><td>Editar el monitor de 3 a 4 piezas</td><td>Precio P. $6,800.00; el subtotal sube exactamente $1,700.00</td></tr>
+    <tr><td>Ordenar por Precio P. descendente</td><td>Impresora, monitor, teclado, SSD, mouse</td></tr>
+    <tr><td>Eliminar el mouse</td><td>Pide confirmación; el subtotal baja $1,745.00</td></tr>
+    <tr><td>Recargar la página</td><td>Se conservan productos y totales</td></tr>
+    <tr><td>Vista a 390 px</td><td>Sin desbordamiento horizontal</td></tr>
+    <tr><td>Consola del navegador</td><td>Sin errores ni advertencias</td></tr>
+</table>
+<p>Las pruebas encontraron una falla que se corrigió antes de la entrega: las
+notificaciones aparecían arriba a la derecha y, al registrar varios productos
+seguidos, tapaban el campo de precio y el botón Registrar. Se movieron a la
+esquina inferior izquierda.</p>
+
+<h2>7. Conclusiones</h2>
+<p>La aplicación cumple lo que pide la práctica: registra, edita y elimina
+productos de una compra y calcula el Subtotal, el IVA y el Total a pagar, con
+una interfaz que sigue la imagen de referencia y está publicada en un dominio
+gratuito.</p>
+<p>El DataTable de PrimeVue resolvió con unas cuantas propiedades lo que a
+mano costaría bastante código: ordenamiento por columna, paginación con
+selector de filas y plantillas para dar formato a cada celda. Al combinarlo
+con la reactividad de Vue, la tabla y los totales nunca se desincronizan,
+porque ambos se derivan del mismo arreglo. El detalle más delicado fue el
+dinero: calcular en centavos enteros evitó los errores de redondeo de los
+números decimales.</p>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "06-punto-de-venta",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@primeuix/themes": "^2.0.3",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.5.4",
+    "vue": "^3.5.44"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.10",
+    "vite": "^8.3.4"
+  }
+}

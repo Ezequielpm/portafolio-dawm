@@ -67,5 +67,17 @@ const ACTIVIDADES = [
         estado: "Entregada",
         icono: "🪪",
         temas: ["Vue 3", "PrimeVue", "Vue Router", "Código QR", "Código de barras"]
+    },
+    {
+        numero: 6,
+        titulo: "Punto de venta con DataTable",
+        resumen: "Punto de venta en Vue 3 + PrimeVue que registra, edita y " +
+                 "elimina productos en un DataTable con orden y paginación, " +
+                 "y calcula al instante el subtotal, el IVA y el total.",
+        ruta: "https://punto-de-venta-unach.vercel.app",
+        fecha: "Noviembre 2026",
+        estado: "Entregada",
+        icono: "🧾",
+        temas: ["Vue 3", "PrimeVue", "DataTable", "computed", "localStorage"]
     }
 ];

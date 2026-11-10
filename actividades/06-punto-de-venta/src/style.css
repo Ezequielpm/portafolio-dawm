@@ -1,0 +1,17 @@
+:root {
+    --fondo: #dfe3e8;
+    --texto: #334155;
+    --suave: #64748b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Lato', system-ui, sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+    -webkit-font-smoothing: antialiased;
+}
